@@ -7,14 +7,16 @@ namespace timetable
 
 struct Interval
 {
-	time_t start;
-	time_t end;
+	Interval(time_t s, time_t e): start(s), end(e) {}
 
 	bool operator==(const Interval& rhs)
 	{
 		return this->start == rhs.start
 			   && this->end == rhs.end;
 	}
+
+	time_t start;
+	time_t end;
 };
 
 template<class _Tp>
@@ -25,7 +27,7 @@ class Timetable
 
 		virtual void RemoveInterval(const Interval &interval) = 0;
 
-		virtual _Tp GetInInterval(const Interval &interval) const = 0;
+		virtual _Tp GetInInterval(const Interval &interval, bool strict) const = 0;
 
 		const _Tp& GetAll() const { return schedule; }
 

@@ -17,7 +17,7 @@ class Event : public Timetable<forward_list<Interval>>
 
 		void RemoveInterval(const Interval& interval) override;
 
-		forward_list<Interval> GetInInterval(const Interval& interval) const override;
+		forward_list<Interval> GetInInterval(const Interval& interval, bool strict) const override;
 };
 
 } // namespace timetable

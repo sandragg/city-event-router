@@ -33,7 +33,7 @@ void Event::RemoveInterval(const Interval& interval)
 	}
 }
 
-forward_list<Interval> Event::GetInInterval(const Interval& interval) const
+forward_list<Interval> Event::GetInInterval(const Interval& interval, bool strict) const
 {
 	forward_list<Interval> inclusions;
 	auto prev_interval = inclusions.before_begin();
@@ -43,12 +43,11 @@ forward_list<Interval> Event::GetInInterval(const Interval& interval) const
 		if (range.end <= interval.start) continue;
 		if (range.start >= interval.end) break;
 
-		inclusions.insert_after(
+		inclusions.emplace_after(
 			prev_interval,
-			{
-				max(range.start, interval.start),
-				min(range.end, interval.end)
-			});
+			strict ? max(range.start, interval.start) : range.start,
+			strict ? min(range.end, interval.end) : range.end
+		);
 
 		++prev_interval;
 	}
