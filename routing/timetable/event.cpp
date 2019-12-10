@@ -54,3 +54,8 @@ forward_list<Interval> Event::GetInInterval(const Interval& interval, bool stric
 
 	return inclusions;
 }
+
+forward_list<Interval> Event::GetAll() const
+{
+	return forward_list<Interval>(schedule);
+}

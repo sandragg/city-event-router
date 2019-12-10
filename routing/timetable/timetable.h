@@ -29,10 +29,7 @@ class Timetable
 
 		virtual _Tp GetInInterval(const Interval &interval, bool strict) const = 0;
 
-		const _Tp& GetAll() const { return schedule; }
-
-	protected:
-		_Tp schedule;
+		virtual _Tp GetAll() const = 0;
 };
 
 } // namespace timetable

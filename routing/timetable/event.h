@@ -18,6 +18,11 @@ class Event : public Timetable<forward_list<Interval>>
 		void RemoveInterval(const Interval& interval) override;
 
 		forward_list<Interval> GetInInterval(const Interval& interval, bool strict) const override;
+
+		forward_list<Interval> GetAll() const override;
+
+	private:
+		forward_list<Interval> schedule;
 };
 
 } // namespace timetable
