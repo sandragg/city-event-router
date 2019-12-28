@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Create a new component template
+
+NAME=$1
+COMPONENT_PATH=$2
+
+if [ -z "$COMPONENT_PATH" ]; then COMPONENT_PATH=$PWD; fi
+DIR=$COMPONENT_PATH/$NAME
+
+mkdir $DIR
+> $DIR/index.ts
+> $DIR/$NAME.tsx
+> $DIR/$NAME.css
+
+if (($? == 0)); then
+ echo "Component $NAME was created in $COMPONENT_PATH"
+else
+ echo "Something went wrong"
+fi
