@@ -1,0 +1,20 @@
+.map-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100vw;
+    height: 100vh;
+}
+
+.map {
+   flex: 1;
+}
+
+.sidebar {
+    width: 300px;
+}
+
+.align_right {
+    border-left: 2px solid rgb(220, 220, 220);
+}
+

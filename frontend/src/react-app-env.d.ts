@@ -1,6 +1,6 @@
 /// <reference types="react-scripts" />
 
-import { AnyObject } from "react-yandex-maps";
+import {BalloonProperties} from "./models/ymaps/balloon-properties";
 
 /* Payload */
 
@@ -59,31 +59,15 @@ interface Rating {
 	score: number;
 }
 
-interface ObjectData extends AnyObject {
-	id?: string;
-	name: string;
-	description: string;
-	type: string;
-	address: string;
-	boundedBy: [number, number][];
-	point: [number, number];
-	url?: string;
-	responseMetaData: ResponseMetaData;
-	rating?: Rating;
-	mtrData?: MetroStationData;
-}
-
 /* Map API */
 
 interface InfoObject {
-	properties: {
-		getAll() : ObjectData
-	};
+	properties: BalloonProperties;
 	map: MapApi;
 }
 
 interface IEvent {
-	get(name: string) : object;
+	get(name: string) : any;
 }
 
 interface EntityEvent extends IEvent {
@@ -99,20 +83,24 @@ interface EventManager<T extends string> {
 	fire(type: T, event?: EntityEvent) : this;
 }
 
+interface IDomEventEmitter<T> {
+	events: EventManager<T>;
+}
+
 type BalloonEvents =
 	"open"
 	| "close"
 	| "userclose"
 	| "beforeuserclose";
 
-interface BalloonApi {
-	events: EventManager<BalloonEvents>;
-
+interface BalloonApi extends IDomEventEmitter<BalloonEvents> {
 	isOpen() : boolean;
 	setData(data: InfoObject) : Promise<undefined>;
 	getData() : InfoObject | null;
 	getPosition() : number[] | null;
 	destroy() : void;
+	// [ latitude, longitude ]
+	open(position?: [number, number], data?: any, options?: any) : Promise<undefined>
 	close(force?: boolean) : Promise<undefined>
 }
 
@@ -126,7 +114,6 @@ type MapEvents =
 	| "hintclose"
 	| "contextmenu";
 
-interface MapApi {
-	events: EventManager<MapEvents>;
+interface MapApi extends IDomEventEmitter<MapEvents> {
 	balloon: BalloonApi;
 }
