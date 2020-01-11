@@ -36,7 +36,8 @@ const MainMap: React.FC = () => {
 				<RouteEditor />
 			</Map>
 			<section className="sidebar align_right">
-				<RouteControl mapApi={mapApi} />
+				// @ts-ignore
+				<RouteControl map={mapApi} />
 			</section>
 		</div>
 	);
