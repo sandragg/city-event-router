@@ -1,22 +1,13 @@
 /// <reference types="react-scripts" />
 
 import {BalloonProperties} from "./models/ymaps/balloon-properties";
+import {WeekDay} from "./models/week-day";
 
 /* Payload */
 
 interface Range<T> {
 	from: T;
 	to: T;
-}
-
-enum WeekDay {
-	Monday = "Monday",
-	Tuesday = "Tuesday",
-	Thursday = "Thursday",
-	Friday = "Friday",
-	Saturday = "Saturday",
-	Sunday = "Sunday",
-	Everyday = "Everyday"
 }
 
 interface Schedule {
@@ -116,4 +107,5 @@ type MapEvents =
 
 interface MapApi extends IDomEventEmitter<MapEvents> {
 	balloon: BalloonApi;
+	geoObjects: any;
 }
