@@ -18,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "newcmp": "bash scripts/newcmp"
+    "newcmp": "bash scripts2/newcmp"
   },
   "eslintConfig": {
     "extends": "react-app"
