@@ -1,6 +1,7 @@
 #ifndef ROUTING_TIMETABLE_H
 #define ROUTING_TIMETABLE_H
 
+#include <ctime>
 
 namespace timetable
 {

@@ -1,5 +1,13 @@
 #include <iostream>
 #include "timetable/event.h"
+#include "distance-matrix/distance-matrix.h"
+
+extern "C" {
+	int foo(int a, int b)
+	{
+		return a + b;
+	}
+}
 
 
 int main()
@@ -32,6 +40,19 @@ int main()
 	for (auto &interval : event_schedule.GetAll())
 	{
 		std::cout << "[" << interval.start << ", " << interval.end << "]" << std::endl;
+	}
+
+	DistanceMatrix dist(3);
+
+	dist.Assign(1, 0, 1);
+	dist.Assign(2, 0, 2);
+	dist.Assign(2, 1, 3);
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		for (size_t j = 0; j < 3; j++)
+			std::cout << dist[i][j] << " ";
+		std::cout << std::endl;
 	}
 
 	return 0;
