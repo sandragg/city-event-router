@@ -8,6 +8,7 @@ namespace timetable
 
 struct Interval
 {
+	Interval(): start(0), end(0) {}
 	Interval(time_t s, time_t e): start(s), end(e) {}
 
 	bool operator==(const Interval& rhs)

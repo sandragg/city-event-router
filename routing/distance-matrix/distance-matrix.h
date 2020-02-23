@@ -11,6 +11,7 @@ class DistanceMatrix
 		DistanceMatrix& Assign(size_t rov, size_t col, int value);
 		DistanceMatrix& Clear();
 		int* operator[](size_t index);
+		const size_t Size() const;
 
 	private:
 		int** matrix;
