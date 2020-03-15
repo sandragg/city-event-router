@@ -4,13 +4,14 @@
 auto is_end(route_context::RouteContext& ctx) {
 	return [&](time_t now, std::unordered_set<int>& unvisited) -> bool
 	{
-		return unvisited.empty();
+		ctx.UpdateOnNewTick(now);
+		return unvisited.empty() || now >= ctx.time_range.end;
 	};
 };
 
 auto predict(route_context::RouteContext& ctx) {
-	return [&](time_t now, std::unordered_set<int>& unvisited, int next_vertex) -> time_t
+	return [&](time_t now, std::unordered_set<int>& unvisited, int next_point_id) -> time_t
 	{
-		return (time_t)0;
+		return 0;
 	};
 };
