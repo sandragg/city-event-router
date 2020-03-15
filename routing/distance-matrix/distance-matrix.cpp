@@ -27,6 +27,11 @@ int* DistanceMatrix::operator[](size_t index)
 	return matrix[index];
 }
 
+const int* DistanceMatrix::operator[](size_t index) const
+{
+	return matrix[index];
+}
+
 DistanceMatrix& DistanceMatrix::Assign(size_t row, size_t col, int value)
 {
 	matrix[row][col] = value;
