@@ -1,9 +1,10 @@
 #include <iostream>
+#include <algorithm>
 #include "timetable/event.h"
 #include "distance-matrix/distance-matrix.h"
-#include "tracer.cpp"
-#include <ctime>
-#include <unordered_set>
+#include "tracer/tracer.h"
+#include "route-context/route-context.h"
+#include "draft-1.cpp"
 
 extern "C" {
 	int foo(int a, int b)
@@ -61,20 +62,13 @@ int main()
 		std::cout << std::endl;
 	}
 
-	tracer::end_condition is_end = [](time_t now, std::unordered_set<int> unvisited)
-	{
-		return unvisited.empty();
-	};
-	tracer::heuristic predict = [](time_t now, std::unordered_set<int> unvisited, int next_vertex)
-	{
-		return (time_t)0;
-	};
-	auto route = tracer::traceGraph(dist, is_end, predict);
+	route_context::RouteContext ctx;
+	auto route = tracer::traceGraph(dist, is_end(ctx), predict(ctx));
 	for (auto &r : route)
 	{
 		std::cout
 			<< r.id
-			<< " (" << r.time.start<< "; "<< r.time.end << ")"
+			<< " (" << r.time.start << "; " << r.time.end << ")"
 			<< std::endl;
 	}
 

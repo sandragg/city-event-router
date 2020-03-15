@@ -15,6 +15,8 @@ include_directories(include)
 add_executable(
     routing main.cpp
     distance-matrix/distance-matrix.h distance-matrix/distance-matrix.cpp
+    route-context/route-context.h
+    tracer/tracer.h
     timetable/timetable.h
     timetable/event.h timetable/event.cpp
     timetable/place.h timetable/place.cpp)
