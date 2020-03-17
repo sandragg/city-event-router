@@ -7,7 +7,9 @@
 #include <queue>
 #include <vector>
 #include "../distance-matrix/distance-matrix.h"
-#include "../timetable/timetable.h"
+#include "../timetable/interval.h"
+#include "../models/waypoint.h"
+
 
 namespace route_context
 {
@@ -30,14 +32,13 @@ class RouteContext
 		time_t ExtraTimeFee() const;
 		time_t MinStayTime() const;
 
-
 	private:
 		/*
 		 * User preferences
 		 */
 		class DistanceMatrix *dist_matrix;
 
-		void *points; // TODO declare way point type
+		std::vector<Waypoint> points;
 
 		/* Point id -> priority */
 		std::unordered_map<int, int> priorities;

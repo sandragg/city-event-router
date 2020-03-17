@@ -18,8 +18,10 @@ add_executable(
     route-context/route-context.h route-context/route-context.cpp
     tracer/tracer.h
     timetable/timetable.h
+    timetable/interval.h
     timetable/event.h timetable/event.cpp
-    timetable/place.h timetable/place.cpp)
+    timetable/place.h timetable/place.cpp
+    models/waypoint.h models/point.h)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set_target_properties(routing PROPERTIES LINK_FLAGS
