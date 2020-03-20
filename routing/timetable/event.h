@@ -21,6 +21,8 @@ class Event : public Timetable<forward_list<Interval>>
 
 		forward_list<Interval> GetAll() const override;
 
+		const Interval* GetImmediate(time_t time) const override;
+
 	private:
 		forward_list<Interval> schedule;
 };

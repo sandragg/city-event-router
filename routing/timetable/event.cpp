@@ -59,3 +59,13 @@ forward_list<Interval> Event::GetAll() const
 {
 	return forward_list<Interval>(schedule);
 }
+
+const Interval* Event::GetImmediate(time_t time) const
+{
+	for (auto &range : schedule)
+	{
+		if (range.end <= time) continue;
+		return &range;
+	}
+	return nullptr;
+}

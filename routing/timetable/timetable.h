@@ -19,6 +19,8 @@ class Timetable
 		virtual _Tp GetInInterval(const Interval &interval, bool strict) const = 0;
 
 		virtual _Tp GetAll() const = 0;
+
+		virtual const Interval* GetImmediate(time_t time) const = 0;
 };
 
 } // namespace timetable

@@ -6,7 +6,7 @@ auto is_end(route_context::RouteContext& ctx) {
 	return [&](time_t now, std::unordered_set<int>& unvisited) -> bool
 	{
 		ctx.UpdateOnNewTick(now);
-		return unvisited.empty() || ctx.UpcomingTime() < now;
+		return unvisited.empty() || !ctx.UpcomingExists();
 	};
 };
 
@@ -15,11 +15,11 @@ auto predict(route_context::RouteContext& ctx) {
 	{
 		time_t result = 0;
 
-		if (!ctx.IsPointOpen(point_id))
+		if (!ctx.IsPointOpen(now, point_id))
 		{
-			auto time_before_open = ctx.TimeBeforePointOpen(point_id);
+			auto time_before_open = ctx.TimeBeforePointOpen(now, point_id);
 
-			if (!time_before_open)
+			if (time_before_open == ctx.PastTime())
 				return std::numeric_limits<time_t>::max();
 
 			result += time_before_open * ctx.TimeBeforeOpenFee();

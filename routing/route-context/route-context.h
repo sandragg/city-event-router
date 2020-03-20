@@ -18,27 +18,37 @@ class RouteContext
 {
 	public:
 		RouteContext() {}
+
 		void UpdateOnNewTick(time_t now);
-	 	bool IsPointOpen(int point_id) const;
-		time_t TimeBeforePointOpen(int point_id) const;
+	 	bool IsPointOpen(time_t now, int point_id) const;
+		time_t TimeBeforePointOpen(time_t now, int point_id) const;
 
 		int PointPriority(int point_id) const;
 		const DistanceMatrix& DistanceMatrix() const;
+		bool UpcomingExists() const;
 		time_t UpcomingTime() const;
 		int UpcomingPointId() const;
-
+		bool PastTime() const;
 		time_t LateFee() const;
 		time_t TimeBeforeOpenFee() const;
 		time_t ExtraTimeFee() const;
 		time_t MinStayTime() const;
 
 	private:
+
+		struct PointClosingTime
+		{
+			int id;
+			time_t time;
+		};
+
 		/*
 		 * User preferences
 		 */
 		class DistanceMatrix *dist_matrix;
 
-		std::vector<Waypoint> points;
+		/* Point id -> point */
+		std::unordered_map<int, Waypoint> points;
 
 		/* Point id -> priority */
 		std::unordered_map<int, int> priorities;
@@ -57,14 +67,13 @@ class RouteContext
 		/*
 		 * Payload for tracer
 		 */
-		/* Sorted vector of points closing time */
-		std::vector<time_t> time_priorities;
+		const static int PAST_TIME = -1;
 
-		/* Point id -> index in time_priorities */
-		std::unordered_map<int, int> pointIdToIndex;
+		/* Sorted vector of points closing time */
+		std::vector<PointClosingTime> time_priorities;
 
 		/* Iterator to the nearest closing point in time_priorities */
-		std::vector<time_t>::iterator upcoming;
+		std::vector<PointClosingTime>::iterator upcoming;
 };
 
 } // namespace route_context
