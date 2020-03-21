@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "../timetable/interval.h"
+#include "./priority-point.h"
 
 
 struct CustomSettings
@@ -14,7 +15,7 @@ struct CustomSettings
 	time_t extra_time_fee;
 
 	/* pair<point id, priority>  */
-	std::vector<std::pair<int, int>> *points_priorities;
+	std::vector<PriorityPoint<int>> *points_priorities;
 
 	timetable::Interval time_range;
 };

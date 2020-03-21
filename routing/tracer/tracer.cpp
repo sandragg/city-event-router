@@ -1,5 +1,4 @@
 #include "tracer.h"
-#include "../models/priority-point.h"
 using namespace tracer;
 
 

@@ -10,6 +10,7 @@
 #include <ctime>
 #include "../timetable/timetable.h"
 #include "../distance-matrix/distance-matrix.h"
+#include "../models/priority-point.h"
 
 
 namespace tracer

@@ -8,7 +8,7 @@ struct PriorityPoint
 	int id;
 	_Tp priority;
 
-	bool operator>(const PriorityPoint& rhs)
+	bool operator>(const PriorityPoint<_Tp>& rhs)
 	{
 		return this->priority > rhs.priority;
 	}
