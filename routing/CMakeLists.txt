@@ -22,7 +22,8 @@ add_executable(
     timetable/event.h timetable/event.cpp
     timetable/place.h timetable/place.cpp
     models/waypoint.h models/point.h
-    models/priority-point.h)
+    models/priority-point.h
+    models/custom-settings.h)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set_target_properties(routing PROPERTIES LINK_FLAGS
