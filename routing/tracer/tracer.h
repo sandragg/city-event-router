@@ -26,17 +26,6 @@ struct RoutePoint
 	timetable::Interval time; // start time and duration
 };
 
-struct PriorityPoint
-{
-	int id;
-	time_t priority;
-
-	bool operator>(const PriorityPoint& rhs)
-	{
-		return this->priority > rhs.priority;
-	}
-};
-
 template<typename End_Cond_Tp, typename Heuristic_Tp>
 vector<RoutePoint> traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& predict);
 

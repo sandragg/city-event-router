@@ -9,6 +9,7 @@
 #include "../distance-matrix/distance-matrix.h"
 #include "../timetable/interval.h"
 #include "../models/waypoint.h"
+#include "../models/priority-point.h"
 
 
 namespace route_context
@@ -35,13 +36,6 @@ class RouteContext
 		time_t MinStayTime() const;
 
 	private:
-
-		struct PointClosingTime
-		{
-			int id;
-			time_t time;
-		};
-
 		/*
 		 * User preferences
 		 */
@@ -70,10 +64,10 @@ class RouteContext
 		const static int PAST_TIME = -1;
 
 		/* Sorted vector of points closing time */
-		std::vector<PointClosingTime> time_priorities;
+		std::vector<PriorityPoint<time_t>> time_priorities;
 
 		/* Iterator to the nearest closing point in time_priorities */
-		std::vector<PointClosingTime>::iterator upcoming;
+		std::vector<PriorityPoint<time_t>>::iterator upcoming;
 };
 
 } // namespace route_context

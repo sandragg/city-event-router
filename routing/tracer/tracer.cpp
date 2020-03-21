@@ -1,4 +1,5 @@
 #include "tracer.h"
+#include "../models/priority-point.h"
 using namespace tracer;
 
 
@@ -16,8 +17,8 @@ vector<RoutePoint> traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end,
 	time_t curr_time = 0;
 	// mb priority queue will help to go back step by step in case of false route.
 	priority_queue<
-		PriorityPoint,
-		vector<PriorityPoint>,
+		PriorityPoint<time_t>,
+		vector<PriorityPoint<time_t>>,
 		greater<>
 	> next_step;
 

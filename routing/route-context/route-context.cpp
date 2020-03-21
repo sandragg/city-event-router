@@ -8,9 +8,9 @@ void RouteContext::UpdateOnNewTick(time_t now)
 		upcoming,
 		time_priorities.end(),
 		now,
-		[](const PointClosingTime &point, time_t time)
+		[](const PriorityPoint<time_t> &point, time_t time)
 		{
-			return point.time < time;
+			return point.priority < time;
 		});
 }
 
@@ -31,7 +31,7 @@ bool RouteContext::UpcomingExists() const
 
 time_t RouteContext::UpcomingTime() const
 {
-	return upcoming->time;
+	return upcoming->priority;
 }
 
 int RouteContext::UpcomingPointId() const
