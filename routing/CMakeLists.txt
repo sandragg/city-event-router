@@ -13,17 +13,13 @@ include_directories(include)
 
 
 add_executable(
-    routing main.cpp
-    distance-matrix/distance-matrix.h distance-matrix/distance-matrix.cpp
-    route-context/route-context.h route-context/route-context.cpp
-    tracer/tracer.h
-    timetable/timetable.h
-    timetable/interval.h
-    timetable/event.h timetable/event.cpp
-    timetable/place.h timetable/place.cpp
-    models/waypoint.h models/point.h
-    models/priority-point.h
-    models/custom-settings.h)
+    routing
+    main.cpp
+    distance-matrix/distance-matrix.cpp
+    route-context/route-context.cpp
+    tracer/tracer.cpp
+    timetable/event.cpp
+    timetable/place.cpp)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set_target_properties(routing PROPERTIES LINK_FLAGS
