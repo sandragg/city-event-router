@@ -10,6 +10,7 @@
 #include "../timetable/interval.h"
 #include "../models/waypoint.h"
 #include "../models/priority-point.h"
+#include "../models/custom-settings.h"
 
 
 namespace route_context
@@ -18,7 +19,10 @@ namespace route_context
 class RouteContext
 {
 	public:
-		RouteContext() {}
+		RouteContext(
+			const class DistanceMatrix &dist_matrix,
+			const std::vector<Waypoint> &points,
+			const CustomSettings &settings);
 
 		void UpdateOnNewTick(time_t now);
 	 	bool IsPointOpen(time_t now, int point_id) const;
@@ -39,7 +43,7 @@ class RouteContext
 		/*
 		 * User preferences
 		 */
-		class DistanceMatrix *dist_matrix;
+		const class DistanceMatrix *dist_matrix;
 
 		std::vector<Waypoint> points;
 
@@ -70,6 +74,8 @@ class RouteContext
 
 		/* Point id -> index in time_priorities, priorities, points */
 		std::unordered_map<int, int> pointIdToIndex;
+
+		time_t ComputePointClosingTime(const Waypoint &point) const;
 };
 
 } // namespace route_context

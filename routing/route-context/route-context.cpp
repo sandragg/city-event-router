@@ -1,6 +1,51 @@
+#include <map>
 #include "route-context.h"
 using namespace route_context;
 
+
+RouteContext::RouteContext(
+	const class DistanceMatrix& dist_matrix,
+	const std::vector<Waypoint>& points,
+	const CustomSettings& settings)
+{
+	this->dist_matrix = &dist_matrix;
+
+	this->min_stay_time = settings.min_stay_time;
+	this->late_fee = settings.late_fee;
+	this->time_before_open_fee = settings.time_before_open_fee;
+	this->extra_time_fee = settings.extra_time_fee;
+	this->time_range = settings.time_range;
+
+	std::map<time_t, int> closing_time_to_point_id;
+	for (auto& point : points)
+		closing_time_to_point_id.emplace(ComputePointClosingTime(point), point.id);
+
+	std::unordered_map<int, int> point_id_to_priority;
+	for (const auto &point : *settings.points_priorities)
+		point_id_to_priority.emplace(point.id, point.priority);
+
+	pointIdToIndex.reserve(points.size());
+	time_priorities.reserve(points.size());
+	priorities.reserve(points.size());
+
+	int index = 0;
+	for (auto &[time, id] : closing_time_to_point_id)
+	{
+		pointIdToIndex.emplace(id, index);
+		time_priorities[index] = time;
+		priorities[index] = point_id_to_priority.at(id);
+		index++;
+	}
+
+	this->points = points;
+	std::sort(
+		this->points.begin(),
+		this->points.end(),
+		[this](const Waypoint& lhs, const Waypoint& rhs)
+		{
+			return pointIdToIndex.at(lhs.id) < pointIdToIndex.at(rhs.id);
+		});
+}
 
 void RouteContext::UpdateOnNewTick(time_t now)
 {
