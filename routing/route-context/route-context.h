@@ -41,11 +41,9 @@ class RouteContext
 		 */
 		class DistanceMatrix *dist_matrix;
 
-		/* Point id -> point */
-		std::unordered_map<int, Waypoint> points;
+		std::vector<Waypoint> points;
 
-		/* Point id -> priority */
-		std::unordered_map<int, int> priorities;
+		std::vector<int> priorities;
 
 		time_t min_stay_time;
 
@@ -64,10 +62,14 @@ class RouteContext
 		const static int PAST_TIME = -1;
 
 		/* Sorted vector of points closing time */
-		std::vector<PriorityPoint<time_t>> time_priorities;
+		std::vector<time_t> time_priorities;
 
-		/* Iterator to the nearest closing point in time_priorities */
-		std::vector<PriorityPoint<time_t>>::iterator upcoming;
+		/* Index of the nearest closing point.
+		 * A common cursor for time_priorities, priorities, point vectors */
+		int upcoming;
+
+		/* Point id -> index in time_priorities, priorities, points */
+		std::unordered_map<int, int> pointIdToIndex;
 };
 
 } // namespace route_context

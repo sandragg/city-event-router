@@ -4,19 +4,15 @@ using namespace route_context;
 
 void RouteContext::UpdateOnNewTick(time_t now)
 {
-	upcoming = lower_bound(
-		upcoming,
-		time_priorities.end(),
-		now,
-		[](const PriorityPoint<time_t> &point, time_t time)
-		{
-			return point.priority < time;
-		});
+	while (upcoming < time_priorities.size())
+		if (time_priorities[upcoming++] >= now) return;
+
+	upcoming = RouteContext::PAST_TIME;
 }
 
 int RouteContext::PointPriority(int point_id) const
 {
-	return priorities.at(point_id);
+	return priorities[pointIdToIndex.at(point_id)];
 }
 
 const DistanceMatrix& RouteContext::DistanceMatrix() const
@@ -26,17 +22,17 @@ const DistanceMatrix& RouteContext::DistanceMatrix() const
 
 bool RouteContext::UpcomingExists() const
 {
-	return upcoming != time_priorities.end();
+	return upcoming != RouteContext::PAST_TIME;
 }
 
 time_t RouteContext::UpcomingTime() const
 {
-	return upcoming->priority;
+	return time_priorities[upcoming];
 }
 
 int RouteContext::UpcomingPointId() const
 {
-	return upcoming->id;
+	return points[upcoming].id;
 }
 
 bool RouteContext::PastTime() const
@@ -66,13 +62,17 @@ time_t RouteContext::MinStayTime() const
 
 bool RouteContext::IsPointOpen(time_t now, int point_id) const
 {
-	auto immediate_interval = points.at(point_id).schedule.GetImmediate(now);
+	auto immediate_interval = points[pointIdToIndex.at(point_id)]
+		.schedule
+		.GetImmediate(now);
 	return immediate_interval ? now >= immediate_interval->start : false;
 }
 
 time_t RouteContext::TimeBeforePointOpen(time_t now, int point_id) const
 {
-	auto immediate_interval = points.at(point_id).schedule.GetImmediate(now);
+	auto immediate_interval = points[pointIdToIndex.at(point_id)]
+		.schedule
+		.GetImmediate(now);
 
 	if (!immediate_interval) return RouteContext::PAST_TIME;
 
