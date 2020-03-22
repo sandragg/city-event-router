@@ -124,3 +124,19 @@ time_t RouteContext::TimeBeforePointOpen(time_t now, int point_id) const
 	auto difference = immediate_interval->start - now;
 	return difference > 0 ? difference : 0;
 }
+
+time_t RouteContext::ComputePointClosingTime(const Waypoint& point) const
+{
+	auto schedule = point.schedule.GetInInterval(this->time_range, true);
+
+	time_t last_time = RouteContext::PAST_TIME;
+	time_t temp_time = 0;
+	for (auto &interval : schedule)
+	{
+		temp_time = interval.end - this->min_stay_time;
+		if (temp_time >= interval.start)
+			last_time = temp_time;
+	}
+
+	return last_time;
+}
