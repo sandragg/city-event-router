@@ -1,0 +1,2 @@
+#define Routing_VERSION_MAJOR @Routing_VERSION_MAJOR@
+#define Routing_VERSION_MINOR @Routing_VERSION_MINOR@
