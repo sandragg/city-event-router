@@ -19,6 +19,7 @@ namespace route_context
 class RouteContext
 {
 	public:
+		RouteContext() {}
 		RouteContext(
 			const class DistanceMatrix &dist_matrix,
 			const std::vector<Waypoint> &points,

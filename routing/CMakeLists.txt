@@ -4,6 +4,8 @@ project(Routing VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+set(PROJECT_RELEASE_DIR ${PROJECT_SOURCE_DIR}/release)
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set(CMAKE_C_COMPILER "emcc")
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/../frontend/shared")
@@ -14,11 +16,11 @@ add_definitions(-std=c++17)
 add_executable(
     Routing
     main.cpp
-    distance-matrix/distance-matrix.cpp
-    route-context/route-context.cpp
-    tracer/tracer.cpp
-    timetable/event.cpp
-    timetable/place.cpp)
+    src/distance-matrix/distance-matrix.cpp
+    src/route-context/route-context.cpp
+    src/tracer/tracer.cpp
+    src/timetable/event.cpp
+    src/timetable/place.cpp)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set_target_properties(routing PROPERTIES LINK_FLAGS
@@ -27,3 +29,9 @@ endif ()
 
 configure_file(RoutingConfig.h.in RoutingConfig.h)
 target_include_directories(Routing PUBLIC "${PROJECT_BINARY_DIR}")
+
+install(TARGETS Routing
+        DESTINATION ${PROJECT_RELEASE_DIR}/bin)
+
+install(FILES "${PROJECT_BINARY_DIR}/RoutingConfig.h"
+        DESTINATION ${PROJECT_RELEASE_DIR}/include)

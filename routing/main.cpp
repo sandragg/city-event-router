@@ -1,10 +1,10 @@
 #include <iostream>
 #include <algorithm>
-#include "timetable/event.h"
-#include "distance-matrix/distance-matrix.h"
-#include "tracer/tracer.h"
-#include "route-context/route-context.h"
-#include "draft-1.cpp"
+#include "src/timetable/event.h"
+#include "src/distance-matrix/distance-matrix.h"
+#include "src/tracer/tracer.h"
+#include "src/route-context/route-context.h"
+#include "src/draft-1.cpp"
 
 extern "C" {
 	int foo(int a, int b)
