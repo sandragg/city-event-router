@@ -62,7 +62,8 @@ int main()
 		std::cout << std::endl;
 	}
 
-	route_context::RouteContext ctx;
+	std::vector<Waypoint> points;
+	route_context::RouteContext ctx(dist, points);
 	auto route = tracer::traceGraph(dist, is_end(ctx), predict(ctx));
 	for (auto &r : route)
 	{

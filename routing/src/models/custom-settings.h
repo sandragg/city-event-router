@@ -9,6 +9,8 @@
 
 struct CustomSettings
 {
+	CustomSettings();
+
 	time_t min_stay_time;
 	time_t late_fee;
 	time_t time_before_open_fee;
@@ -17,7 +19,7 @@ struct CustomSettings
 	/* pair<point id, priority>  */
 	std::vector<PriorityPoint<int>> *points_priorities;
 
-	timetable::Interval time_range;
+	timetable::Interval *time_range;
 };
 
 

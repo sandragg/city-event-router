@@ -8,7 +8,7 @@
 struct Waypoint
 {
 	int id;
-	Point coords;
+	Point coords; // is it necessary?
 	timetable::Event schedule;
 };
 

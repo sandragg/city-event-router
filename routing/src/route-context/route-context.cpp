@@ -5,7 +5,23 @@ using namespace route_context;
 
 RouteContext::RouteContext(
 	const class DistanceMatrix& dist_matrix,
-	const std::vector<Waypoint>& points,
+	const std::vector<Waypoint>& waypoints)
+{
+	this->dist_matrix = &dist_matrix;
+
+	this->min_stay_time = 1;
+	this->late_fee = 1;
+	this->time_before_open_fee = 1;
+	this->extra_time_fee = 1;
+	this->time_range = nullptr;
+	this->priorities = nullptr;
+
+	BaseInitialization(waypoints);
+}
+
+RouteContext::RouteContext(
+	const class DistanceMatrix& dist_matrix,
+	const std::vector<Waypoint>& waypoints,
 	const CustomSettings& settings)
 {
 	this->dist_matrix = &dist_matrix;
@@ -14,37 +30,28 @@ RouteContext::RouteContext(
 	this->late_fee = settings.late_fee;
 	this->time_before_open_fee = settings.time_before_open_fee;
 	this->extra_time_fee = settings.extra_time_fee;
-	this->time_range = settings.time_range;
+	this->time_range = settings.time_range
+		? new timetable::Interval(*settings.time_range)
+		: nullptr;
 
-	std::map<time_t, int> closing_time_to_point_id;
-	for (auto& point : points)
-		closing_time_to_point_id.emplace(ComputePointClosingTime(point), point.id);
+	BaseInitialization(waypoints);
 
-	std::unordered_map<int, int> point_id_to_priority;
-	for (const auto &point : *settings.points_priorities)
-		point_id_to_priority.emplace(point.id, point.priority);
-
-	pointIdToIndex.reserve(points.size());
-	time_priorities.reserve(points.size());
-	priorities.reserve(points.size());
-
-	int index = 0;
-	for (auto &[time, id] : closing_time_to_point_id)
+	if (!settings.points_priorities)
 	{
-		pointIdToIndex.emplace(id, index);
-		time_priorities[index] = time;
-		priorities[index] = point_id_to_priority.at(id);
-		index++;
+		this->priorities = nullptr;
+		return;
 	}
 
-	this->points = points;
-	std::sort(
-		this->points.begin(),
-		this->points.end(),
-		[this](const Waypoint& lhs, const Waypoint& rhs)
-		{
-			return pointIdToIndex.at(lhs.id) < pointIdToIndex.at(rhs.id);
-		});
+	this->priorities = new std::vector<int>(waypoints.size());
+
+	for (auto &point : *settings.points_priorities)
+		(*this->priorities)[pointIdToIndex.at(point.id)] = point.priority;
+}
+
+RouteContext::~RouteContext()
+{
+	delete this->time_range;
+	delete this->priorities;
 }
 
 void RouteContext::UpdateOnNewTick(time_t now)
@@ -57,7 +64,7 @@ void RouteContext::UpdateOnNewTick(time_t now)
 
 int RouteContext::PointPriority(int point_id) const
 {
-	return priorities[pointIdToIndex.at(point_id)];
+	return priorities ? (*priorities)[pointIdToIndex.at(point_id)] : 1;
 }
 
 const DistanceMatrix& RouteContext::DistanceMatrix() const
@@ -127,7 +134,9 @@ time_t RouteContext::TimeBeforePointOpen(time_t now, int point_id) const
 
 time_t RouteContext::ComputePointClosingTime(const Waypoint& point) const
 {
-	auto schedule = point.schedule.GetInInterval(this->time_range, true);
+	auto schedule = this->time_range
+		? point.schedule.GetInInterval(*this->time_range, true)
+		: point.schedule.GetAll();
 
 	time_t last_time = RouteContext::PAST_TIME;
 	time_t temp_time = 0;
@@ -139,4 +148,33 @@ time_t RouteContext::ComputePointClosingTime(const Waypoint& point) const
 	}
 
 	return last_time;
+}
+
+void RouteContext::BaseInitialization(const std::vector<Waypoint>& waypoints)
+{
+	std::map<time_t, int> closing_time_to_point_id;
+	for (auto& point : waypoints)
+		closing_time_to_point_id.emplace(ComputePointClosingTime(point), point.id);
+
+	pointIdToIndex.reserve(waypoints.size());
+	time_priorities.reserve(waypoints.size());
+
+	int index = 0;
+	for (auto &[time, id] : closing_time_to_point_id)
+	{
+		pointIdToIndex.emplace(id, index);
+		time_priorities[index] = time;
+		index++;
+	}
+
+	this->upcoming = 0;
+	this->points = waypoints;
+
+	std::sort(
+		this->points.begin(),
+		this->points.end(),
+		[this](const Waypoint& lhs, const Waypoint& rhs)
+		{
+			return pointIdToIndex.at(lhs.id) < pointIdToIndex.at(rhs.id);
+		});
 }

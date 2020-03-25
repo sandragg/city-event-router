@@ -19,11 +19,16 @@ namespace route_context
 class RouteContext
 {
 	public:
-		RouteContext() {}
 		RouteContext(
 			const class DistanceMatrix &dist_matrix,
-			const std::vector<Waypoint> &points,
+			const std::vector<Waypoint> &waypoints);
+
+		RouteContext(
+			const class DistanceMatrix &dist_matrix,
+			const std::vector<Waypoint> &waypoints,
 			const CustomSettings &settings);
+
+		~RouteContext();
 
 		void UpdateOnNewTick(time_t now);
 	 	bool IsPointOpen(time_t now, int point_id) const;
@@ -48,7 +53,7 @@ class RouteContext
 
 		std::vector<Waypoint> points;
 
-		std::vector<int> priorities;
+		std::vector<int> *priorities;
 
 		time_t min_stay_time;
 
@@ -59,7 +64,7 @@ class RouteContext
 
 		/* Available time interval for route.
 		 * Maybe time_range will be squashed in time_priorities */
-		timetable::Interval time_range;
+		timetable::Interval *time_range;
 
 		/*
 		 * Payload for tracer
@@ -76,6 +81,7 @@ class RouteContext
 		/* Point id -> index in time_priorities, priorities, points */
 		std::unordered_map<int, int> pointIdToIndex;
 
+		void BaseInitialization(const std::vector<Waypoint>& points);
 		time_t ComputePointClosingTime(const Waypoint &point) const;
 };
 
