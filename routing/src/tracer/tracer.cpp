@@ -48,6 +48,7 @@ vector<RoutePoint> traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end,
 			});
 		next_step = decltype(next_step)();
 		unvisited.erase(next_point.id);
+		point = next_point.id;
 	}
 
 	return route;

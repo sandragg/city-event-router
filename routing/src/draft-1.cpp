@@ -5,7 +5,7 @@
 auto is_end(route_context::RouteContext& ctx) {
 	return [&](time_t now, std::unordered_set<int>& unvisited) -> bool
 	{
-		ctx.UpdateOnNewTick(now);
+		ctx.UpdateOnNewTick(now); // should skip visited points
 		return unvisited.empty() || !ctx.UpcomingExists();
 	};
 };

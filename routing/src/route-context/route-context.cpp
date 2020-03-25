@@ -56,8 +56,8 @@ RouteContext::~RouteContext()
 
 void RouteContext::UpdateOnNewTick(time_t now)
 {
-	while (upcoming < time_priorities.size())
-		if (time_priorities[upcoming++] >= now) return;
+	for (; upcoming < time_priorities.size(); upcoming++)
+		if (time_priorities[upcoming] >= now) return;
 
 	upcoming = RouteContext::PAST_TIME;
 }
@@ -152,12 +152,12 @@ time_t RouteContext::ComputePointClosingTime(const Waypoint& point) const
 
 void RouteContext::BaseInitialization(const std::vector<Waypoint>& waypoints)
 {
-	std::map<time_t, int> closing_time_to_point_id;
+	std::multimap<time_t, int> closing_time_to_point_id;
 	for (auto& point : waypoints)
 		closing_time_to_point_id.emplace(ComputePointClosingTime(point), point.id);
 
 	pointIdToIndex.reserve(waypoints.size());
-	time_priorities.reserve(waypoints.size());
+	time_priorities.resize(waypoints.size());
 
 	int index = 0;
 	for (auto &[time, id] : closing_time_to_point_id)

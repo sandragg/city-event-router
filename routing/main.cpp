@@ -13,7 +13,6 @@ extern "C" {
 	}
 }
 
-
 int main()
 {
 	timetable::Event event_schedule;
@@ -55,14 +54,27 @@ int main()
 	dist.Assign(2, 0, 4);
 	dist.Assign(0, 3, 6);
 
-	for (size_t i = 0; i < 3; i++)
+	for (size_t i = 0; i < dist.Size(); i++)
 	{
-		for (size_t j = 0; j < 3; j++)
+		for (size_t j = 0; j < dist.Size(); j++)
 			std::cout << dist[i][j] << " ";
 		std::cout << std::endl;
 	}
 
-	std::vector<Waypoint> points;
+	std::vector<Waypoint> points(4);
+	std::vector<timetable::Interval> schedule;
+
+	schedule.emplace_back(0, 20);
+	schedule.emplace_back(5, 15);
+	schedule.emplace_back(0, 20);
+	schedule.emplace_back(5, 10);
+
+	for (int i = 0; i < points.size(); i++)
+	{
+		points[i].id = i;
+		points[i].schedule.AddInterval(schedule[i]);
+	}
+
 	route_context::RouteContext ctx(dist, points);
 	auto route = tracer::traceGraph(dist, is_end(ctx), predict(ctx));
 	for (auto &r : route)
