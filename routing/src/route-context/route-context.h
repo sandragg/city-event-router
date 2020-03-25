@@ -79,7 +79,7 @@ class RouteContext
 		int upcoming;
 
 		/* Point id -> index in time_priorities, priorities, points */
-		std::unordered_map<int, int> pointIdToIndex;
+		std::unordered_map<int, int> point_id_to_index;
 
 		void BaseInitialization(const std::vector<Waypoint>& points);
 		time_t ComputePointClosingTime(const Waypoint &point) const;

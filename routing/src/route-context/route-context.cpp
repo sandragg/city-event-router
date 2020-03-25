@@ -45,7 +45,7 @@ RouteContext::RouteContext(
 	this->priorities = new std::vector<int>(waypoints.size());
 
 	for (auto &point : *settings.points_priorities)
-		(*this->priorities)[pointIdToIndex.at(point.id)] = point.priority;
+		(*this->priorities)[point_id_to_index.at(point.id)] = point.priority;
 }
 
 RouteContext::~RouteContext()
@@ -64,7 +64,7 @@ void RouteContext::UpdateOnNewTick(time_t now)
 
 int RouteContext::PointPriority(int point_id) const
 {
-	return priorities ? (*priorities)[pointIdToIndex.at(point_id)] : 1;
+	return priorities ? (*priorities)[point_id_to_index.at(point_id)] : 1;
 }
 
 const DistanceMatrix& RouteContext::DistanceMatrix() const
@@ -114,7 +114,7 @@ time_t RouteContext::MinStayTime() const
 
 bool RouteContext::IsPointOpen(time_t now, int point_id) const
 {
-	auto immediate_interval = points[pointIdToIndex.at(point_id)]
+	auto immediate_interval = points[point_id_to_index.at(point_id)]
 		.schedule
 		.GetImmediate(now);
 	return immediate_interval ? now >= immediate_interval->start : false;
@@ -122,7 +122,7 @@ bool RouteContext::IsPointOpen(time_t now, int point_id) const
 
 time_t RouteContext::TimeBeforePointOpen(time_t now, int point_id) const
 {
-	auto immediate_interval = points[pointIdToIndex.at(point_id)]
+	auto immediate_interval = points[point_id_to_index.at(point_id)]
 		.schedule
 		.GetImmediate(now);
 
@@ -156,13 +156,13 @@ void RouteContext::BaseInitialization(const std::vector<Waypoint>& waypoints)
 	for (auto& point : waypoints)
 		closing_time_to_point_id.emplace(ComputePointClosingTime(point), point.id);
 
-	pointIdToIndex.reserve(waypoints.size());
+	point_id_to_index.reserve(waypoints.size());
 	time_priorities.resize(waypoints.size());
 
 	int index = 0;
 	for (auto &[time, id] : closing_time_to_point_id)
 	{
-		pointIdToIndex.emplace(id, index);
+		point_id_to_index.emplace(id, index);
 		time_priorities[index] = time;
 		index++;
 	}
@@ -175,6 +175,6 @@ void RouteContext::BaseInitialization(const std::vector<Waypoint>& waypoints)
 		this->points.end(),
 		[this](const Waypoint& lhs, const Waypoint& rhs)
 		{
-			return pointIdToIndex.at(lhs.id) < pointIdToIndex.at(rhs.id);
+			return point_id_to_index.at(lhs.id) < point_id_to_index.at(rhs.id);
 		});
 }
