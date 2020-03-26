@@ -33,10 +33,26 @@ auto predict(route_context::RouteContext& ctx) {
 			result += ctx.MinStayTime() + dist_to_upcoming;
 		}
 
-		if (result <= upcoming_time)
+		/* Will be late for the upcoming point */
+		if (result > upcoming_time)
+		{
+			auto late_fee = (result - upcoming_time) * ctx.LateFee();
+			return result + late_fee;
+		}
+
+		/* Will be at the latest available time at the upcoming point  */
+		if (result == upcoming_time)
 			return upcoming_time - result;
 
-		auto late_fee = (result - upcoming_time) * ctx.LateFee();
-		return result + late_fee;
+		/* Will be on time or earlier at the upcoming point */
+		auto time_before_open = ctx.TimeBeforePointOpen(now, upcoming_point_id) - now;
+		/* If it's earlier than point opening */
+		if (time_before_open > 0)
+		{
+			auto extra_fee = (time_before_open - result) * ctx.ExtraTimeFee();
+			result -= extra_fee;
+		}
+
+		return upcoming_time - result;
 	};
 };
