@@ -62,6 +62,14 @@ void RouteContext::UpdateOnNewTick(time_t now)
 	upcoming = RouteContext::PAST_TIME;
 }
 
+void RouteContext::SkipUpcomingPoint()
+{
+	if (upcoming == time_priorities.size() - 1)
+		upcoming = RouteContext::PAST_TIME;
+	else
+		upcoming++;
+}
+
 int RouteContext::PointPriority(int point_id) const
 {
 	return priorities ? (*priorities)[point_id_to_index.at(point_id)] : 1;

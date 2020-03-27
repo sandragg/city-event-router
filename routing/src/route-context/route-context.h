@@ -31,6 +31,7 @@ class RouteContext
 		~RouteContext();
 
 		void UpdateOnNewTick(time_t now);
+		void SkipUpcomingPoint();
 	 	bool IsPointOpen(time_t now, int point_id) const;
 		time_t TimeBeforePointOpen(time_t now, int point_id) const;
 
