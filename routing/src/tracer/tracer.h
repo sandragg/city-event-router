@@ -43,7 +43,9 @@ using end_condition = bool(*)(time_t now, unordered_set<int>& unvisited);
 
 struct RoutePoint
 {
-	/** Way point id */
+	/**
+	 * %Point id
+	 */
 	int id;
 	/**
 	 * Time data.
