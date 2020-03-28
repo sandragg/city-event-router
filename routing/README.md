@@ -1,4 +1,5 @@
-\mainpage
+Routing
+=======
 
 ## Introduction
 Routing is a program for computing all possible routes based a on set of way points
