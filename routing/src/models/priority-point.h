@@ -2,6 +2,13 @@
 #define ROUTING_PRIORITY_POINT_H
 
 
+/**
+ * Point with priority.
+ * Useful when it's required to store points sorted by priority
+ * and get id of the first.
+ *
+ * @tparam _Tp Priority type
+ */
 template<class _Tp>
 struct PriorityPoint
 {
