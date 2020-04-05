@@ -12,30 +12,42 @@ namespace list_of_siblings
 template<class _Tp>
 class Tree : public tree::Tree<_Tp>
 {
-	public:
+	private:
 		using base				= tree::Tree<_Tp>;
-		using value_type 		= typename base::value_type;
-		using reference 		= typename base::reference;
-		using const_reference	= typename base::const_reference;
-		using iterator 			= std::iterator_traits<value_type>; // ?
-		using const_iterator	= std::iterator_traits<const value_type>; // ?
 
-		reference Root();
-		const_reference Root() const;
-		reference Find(const_iterator position);
-		const_reference Find(const_iterator position) const;
-		iterator GetParent(const_iterator position);
-		const_iterator GetParent(const_iterator position) const;
-		iterator GetLeftMostChild(const_iterator position);
-		const_iterator GetLeftMostChild(const_iterator position) const;
-		iterator GetRightSibling(const_iterator position);
-		const_iterator GetRightSibling(const_iterator position) const;
-		void Clear();
-		size_t Depth() const;
-		size_t Size() const;
+	public:
+		using value_type		= typename base::value_type;
+		using reference			= typename base::reference;
+		using const_reference	= typename base::const_reference;
+
+		// TODO Create custom Tree iterator
+		// Iterator may point to Node or array index.
+		// Iterator dereference should return value_type.
+		using iterator			= std::iterator_traits<value_type>;
+		using const_iterator	= std::iterator_traits<const value_type>;
+
+		iterator Root() override;
+		const_iterator Root() const override;
+		reference Find(const_iterator position) override;
+		const_reference Find(const_iterator position) const override;
+		iterator GetParent(const_iterator position) override;
+		const_iterator GetParent(const_iterator position) const override;
+		iterator GetLeftMostChild(const_iterator position) override;
+		const_iterator GetLeftMostChild(const_iterator position) const override;
+		iterator GetRightSibling(const_iterator position) override;
+		const_iterator GetRightSibling(const_iterator position) const override;
+		void Clear() override;
+		size_t Depth() const override;
+		size_t Size() const override;
 
 	private:
-		std::vector<std::forward_list<_Tp>> container; // ?
+		struct Node
+		{
+			_Tp value;
+			std::forward_list<size_t> *descendants;
+		};
+
+		std::vector<Node> *nodes;
 };
 
 } // namespace list_of_siblings

@@ -11,14 +11,15 @@ template<class _Tp>
 class Tree
 {
 	public:
-		using value_type 		= _Tp;
-		using reference 		= value_type&;
+		using value_type		= _Tp;
+		using reference			= value_type&;
 		using const_reference	= const value_type&;
-		using iterator 			= std::iterator_traits<value_type>;
+		using iterator			= std::iterator_traits<value_type>;
 		using const_iterator	= std::iterator_traits<const value_type>;
+		using difference_type	= typename iterator::difference_type;
 
-		virtual reference Root() = 0;
-		virtual const_reference Root() const = 0;
+		virtual iterator Root() = 0;
+		virtual const_iterator Root() const = 0;
 		virtual reference Find(const_iterator position) = 0;
 		virtual const_reference Find(const_iterator position) const = 0;
 		virtual iterator GetParent(const_iterator position) = 0;
