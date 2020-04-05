@@ -23,7 +23,8 @@ add_executable(
     src/timetable/event.cpp
     src/timetable/place.cpp
     src/models/custom-settings.cpp
-    src/tree/list-of-siblings.cpp)
+    src/tree/list-of-siblings/list-of-siblings.cpp
+    src/tree/list-of-siblings/iterator.cpp)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set_target_properties(routing PROPERTIES LINK_FLAGS

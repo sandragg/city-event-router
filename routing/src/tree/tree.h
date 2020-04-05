@@ -14,8 +14,8 @@ class Tree
 		using value_type		= _Tp;
 		using reference			= value_type&;
 		using const_reference	= const value_type&;
-		using iterator			= std::iterator_traits<value_type>;
-		using const_iterator	= std::iterator_traits<const value_type>;
+		using iterator			= std::iterator_traits<value_type*>;
+		using const_iterator	= std::iterator_traits<const value_type*>;
 		using difference_type	= typename iterator::difference_type;
 
 		virtual iterator Root() = 0;

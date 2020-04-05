@@ -3,7 +3,8 @@
 
 #include <vector>
 #include <forward_list>
-#include "tree.h"
+#include "../tree.h"
+#include "iterator.h"
 
 
 namespace list_of_siblings
@@ -13,18 +14,16 @@ template<class _Tp>
 class Tree : public tree::Tree<_Tp>
 {
 	private:
+		struct Node;
 		using base				= tree::Tree<_Tp>;
+		using position			= size_t;
 
 	public:
 		using value_type		= typename base::value_type;
 		using reference			= typename base::reference;
 		using const_reference	= typename base::const_reference;
-
-		// TODO Create custom Tree iterator
-		// Iterator may point to Node or array index.
-		// Iterator dereference should return value_type.
-		using iterator			= std::iterator_traits<value_type>;
-		using const_iterator	= std::iterator_traits<const value_type>;
+		using iterator			= TreeIterator<value_type*>;
+		using const_iterator	= TreeIterator<const value_type*>;
 
 		iterator Root() override;
 		const_iterator Root() const override;
@@ -40,6 +39,8 @@ class Tree : public tree::Tree<_Tp>
 		size_t Depth() const override;
 		size_t Size() const override;
 
+		friend class TreeIterator<value_type*>;
+
 	private:
 		struct Node
 		{
@@ -48,6 +49,8 @@ class Tree : public tree::Tree<_Tp>
 		};
 
 		std::vector<Node> *nodes;
+		position root;
+		position space_cursor;
 };
 
 } // namespace list_of_siblings
