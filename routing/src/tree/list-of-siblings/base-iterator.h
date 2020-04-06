@@ -1,5 +1,5 @@
-#ifndef ROUTING_ITERATOR_H
-#define ROUTING_ITERATOR_H
+#ifndef ROUTING_LIST_OF_SIBLINGS_BASE_ITERATOR_H
+#define ROUTING_LIST_OF_SIBLINGS_BASE_ITERATOR_H
 
 #include <iterator>
 #include "list-of-siblings.h"
@@ -9,7 +9,7 @@ namespace list_of_siblings
 {
 
 template<class _Tp>
-struct TreeIterator : public std::iterator_traits<_Tp> {};
+class TreeIterator : public std::iterator_traits<_Tp> {};
 
 template<class _Tp>
 class TreeIterator<_Tp*> : public std::iterator_traits<_Tp*>
@@ -22,19 +22,19 @@ class TreeIterator<_Tp*> : public std::iterator_traits<_Tp*>
 		using reference		= typename base::reference;
 		using pointer		= typename base::pointer;
 
-		TreeIterator(const Tree<_Tp>& tree);
-		TreeIterator(const Tree<_Tp>& tree, position p);
+		explicit TreeIterator(const Tree<_Tp>& tree);
+		explicit TreeIterator(const Tree<_Tp>& tree, position p);
 		reference operator*() const;
-		TreeIterator<_Tp>& operator++(int);
+		TreeIterator<_Tp>& operator++();
 
 	private:
-		Tree<_Tp>* tree;
+		Tree<_Tp> *tree;
 		position cursor;
 };
 
-#include "iterator.cpp"
+#include "base-iterator.cpp"
 
 } // namespace list_of_siblings
 
 
-#endif //ROUTING_ITERATOR_H
+#endif //ROUTING_LIST_OF_SIBLINGS_BASE_ITERATOR_H

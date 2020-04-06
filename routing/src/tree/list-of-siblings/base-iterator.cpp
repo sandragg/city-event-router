@@ -1,5 +1,4 @@
-#include "iterator.h"
-#include "list-of-siblings.h"
+#include "base-iterator.h"
 using namespace list_of_siblings;
 
 
@@ -22,13 +21,12 @@ TreeIterator<_Tp*>::TreeIterator(
 template<class _Tp>
 typename TreeIterator<_Tp*>::reference TreeIterator<_Tp*>::operator*() const
 {
-
+	return tree->nodes[cursor].value;
 }
 
 template<class _Tp>
-TreeIterator<_Tp>& TreeIterator<_Tp*>::operator++(int)
+TreeIterator<_Tp>& TreeIterator<_Tp*>::operator++()
 {
-
+	cursor++;
+	return *this;
 }
-
-
