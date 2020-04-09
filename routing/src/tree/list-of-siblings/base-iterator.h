@@ -3,18 +3,16 @@
 
 #include <iterator>
 #include "list-of-siblings.h"
+#include "../tree.h"
 
 
 namespace list_of_siblings
 {
 
 template<class _Tp>
-class TreeIterator : public std::iterator_traits<_Tp> {};
-
-template<class _Tp>
-class TreeIterator<_Tp*> : public std::iterator_traits<_Tp*>
+class TreeIterator : public tree::TreeIterator<_Tp>
 {
-	using base				= std::iterator_traits<_Tp*>;
+	using base				= tree::TreeIterator<_Tp>;
 	using position			= size_t;
 
 	public:
@@ -22,8 +20,8 @@ class TreeIterator<_Tp*> : public std::iterator_traits<_Tp*>
 		using reference		= typename base::reference;
 		using pointer		= typename base::pointer;
 
-		explicit TreeIterator(const Tree<_Tp>& tree);
-		explicit TreeIterator(const Tree<_Tp>& tree, position p);
+		explicit TreeIterator(Tree<_Tp>& tree);
+		explicit TreeIterator(Tree<_Tp>& tree, position p);
 		reference operator*() const;
 		TreeIterator<_Tp>& operator++();
 
@@ -31,6 +29,9 @@ class TreeIterator<_Tp*> : public std::iterator_traits<_Tp*>
 		Tree<_Tp> *tree;
 		position cursor;
 };
+
+template<class _Tp>
+class ConstTreeIterator : public TreeIterator<const _Tp> {};
 
 #include "base-iterator.cpp"
 

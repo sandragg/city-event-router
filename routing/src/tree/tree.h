@@ -8,14 +8,17 @@ namespace tree
 {
 
 template<class _Tp>
+class TreeIterator : public std::iterator_traits<_Tp*> {};
+
+template<class _Iter, class _ConstIter>
 class Tree
 {
 	public:
-		using value_type		= _Tp;
-		using reference			= value_type&;
-		using const_reference	= const value_type&;
-		using iterator			= std::iterator_traits<value_type*>;
-		using const_iterator	= std::iterator_traits<const value_type*>;
+		using iterator			= _Iter;
+		using const_iterator	= _ConstIter;
+		using value_type		= typename iterator::value_type;
+		using reference			= typename iterator::reference;
+		using const_reference	= typename const_iterator::reference;
 		using difference_type	= typename iterator::difference_type;
 
 		virtual iterator Root() = 0;

@@ -4,26 +4,30 @@
 #include <vector>
 #include <forward_list>
 #include "../tree.h"
-#include "iterator.h"
 
 
 namespace list_of_siblings
 {
 
 template<class _Tp>
-class Tree : public tree::Tree<_Tp>
+class TreeIterator;
+
+template<class _Tp>
+class ConstTreeIterator;
+
+template<class _Tp>
+class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 {
 	private:
 		struct Node;
-		using base				= tree::Tree<_Tp>;
 		using position			= size_t;
 
 	public:
-		using value_type		= typename base::value_type;
-		using reference			= typename base::reference;
-		using const_reference	= typename base::const_reference;
-		using iterator			= TreeIterator<value_type*>;
-		using const_iterator	= TreeIterator<const value_type*>;
+		using value_type		= _Tp;
+		using iterator			= TreeIterator<value_type>;
+		using const_iterator	= ConstTreeIterator<value_type>;
+		using reference			= typename iterator::reference;
+		using const_reference	= typename const_iterator::reference;
 
 		iterator Root() override;
 		const_iterator Root() const override;
@@ -39,7 +43,7 @@ class Tree : public tree::Tree<_Tp>
 		size_t Depth() const override;
 		size_t Size() const override;
 
-		friend class TreeIterator<value_type*>;
+		friend class TreeIterator<value_type>;
 
 	private:
 		struct Node
@@ -52,6 +56,8 @@ class Tree : public tree::Tree<_Tp>
 		position root;
 		position space_cursor;
 };
+
+#include "list-of-siblings.cpp"
 
 } // namespace list_of_siblings
 
