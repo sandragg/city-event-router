@@ -12,13 +12,13 @@ namespace list_of_siblings
 template<class _Tp>
 class ConstTreeIterator : public tree::TreeIterator<const _Tp>
 {
-	using base				= tree::TreeIterator<const _Tp>;
-	using position			= size_t;
+		using base			= tree::TreeIterator<const _Tp>;
+		using position		= size_t;
 
 	public:
 		using value_type	= typename base::value_type;
-		using reference		= typename base::reference;
 		using pointer		= typename base::pointer;
+		using reference		= typename base::reference;
 
 		explicit ConstTreeIterator(std::nullptr_t);
 		explicit ConstTreeIterator(const Tree<_Tp> *tree);
@@ -28,9 +28,7 @@ class ConstTreeIterator : public tree::TreeIterator<const _Tp>
 		bool operator==(const ConstTreeIterator<_Tp>& rhs) const;
 		bool operator!=(const ConstTreeIterator<_Tp>& rhs) const;
 
-		template<class> friend class Tree;
-
-	protected:
+	private:
 		const Tree<_Tp> *tree;
 		position cursor;
 };

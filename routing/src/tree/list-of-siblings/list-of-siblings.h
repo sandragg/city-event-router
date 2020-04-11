@@ -18,8 +18,6 @@ class ConstTreeIterator;
 template<class _Tp>
 class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 {
-	private:
-		struct Node;
 		using position			= size_t;
 
 	public:
@@ -55,6 +53,9 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 		std::vector<Node> *nodes;
 		position root;
 		position space_cursor;
+
+		template<class> friend class TreeIterator;
+		template<class> friend class ConstTreeIterator;
 };
 
 #include "list-of-siblings.cpp"

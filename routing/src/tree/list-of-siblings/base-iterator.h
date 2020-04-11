@@ -12,8 +12,8 @@ namespace list_of_siblings
 template<class _Tp>
 class TreeIterator : public tree::TreeIterator<_Tp>
 {
-	using base				= tree::TreeIterator<_Tp>;
-	using position			= size_t;
+		using base			= tree::TreeIterator<_Tp>;
+		using position		= size_t;
 
 	public:
 		using value_type	= typename base::value_type;
@@ -27,8 +27,6 @@ class TreeIterator : public tree::TreeIterator<_Tp>
 		TreeIterator<_Tp>& operator++();
 		bool operator==(const TreeIterator<_Tp>& rhs) const;
 		bool operator!=(const TreeIterator<_Tp>& rhs) const;
-
-		template<class> friend class Tree;
 
 	private:
 		Tree<_Tp> *tree;
