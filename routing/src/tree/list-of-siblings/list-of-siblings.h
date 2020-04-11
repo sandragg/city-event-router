@@ -42,8 +42,8 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 		void Clear() override;
 		size_t Depth() const override;
 		size_t Size() const override;
-
-		friend class TreeIterator<value_type>;
+		iterator End() override;
+		const_iterator End() const override;
 
 	private:
 		struct Node

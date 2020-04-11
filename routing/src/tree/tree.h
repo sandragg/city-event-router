@@ -34,6 +34,8 @@ class Tree
 		virtual void Clear() = 0;
 		virtual size_t Depth() const = 0;
 		virtual size_t Size() const = 0;
+		virtual iterator End() = 0;
+		virtual const_iterator End() const = 0;
 };
 
 }
