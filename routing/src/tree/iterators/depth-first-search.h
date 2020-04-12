@@ -1,13 +1,12 @@
 #ifndef ROUTING_DEPTH_FIRST_SEARCH_H
 #define ROUTING_DEPTH_FIRST_SEARCH_H
 
+#include<stack>
 #include "../tree.h"
 
 
 namespace tree
 {
-
-using namespace tree;
 
 /**
  * Depth First Search iterator.
@@ -15,7 +14,6 @@ using namespace tree;
 template<class _Container>
 class DfsIterator
 {
-	private:
 		using container	= Tree<
 		    typename _Container::iterator,
 		    typename _Container::const_iterator>;
@@ -26,10 +24,13 @@ class DfsIterator
 		explicit DfsIterator(const container &tree);
 		DfsIterator& operator++();
 		reference operator*();
+		bool IsEnd() const;
 
 	private:
 		container *tree;
-		iterator position;
+		std::stack<iterator> stack;
+
+		void traceIteration(const container &container, std::stack<iterator> &trace_stack);
 };
 
 #include "depth-first-search.cpp"
