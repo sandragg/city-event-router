@@ -25,6 +25,7 @@ class DfsIterator
 		DfsIterator& operator++();
 		reference operator*();
 		bool IsEnd() const;
+		iterator Get() const;
 
 	private:
 		container *tree;

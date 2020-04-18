@@ -29,6 +29,13 @@ bool BfsIterator<_Container>::IsEnd() const
 }
 
 template<class _Container>
+typename BfsIterator<_Container>::iterator
+tree::BfsIterator<_Container>::Get() const
+{
+	return queue.front();
+}
+
+template<class _Container>
 void BfsIterator<_Container>::traceIteration(const container &container, std::queue<iterator> &trace_queue)
 {
 	while (!trace_queue.empty())

@@ -29,6 +29,13 @@ bool DfsIterator<_Container>::IsEnd() const
 }
 
 template<class _Container>
+typename DfsIterator<_Container>::iterator
+DfsIterator<_Container>::Get() const
+{
+	return stack.top();
+}
+
+template<class _Container>
 void DfsIterator<_Container>::traceIteration(const container &container, std::stack<iterator> &trace_stack)
 {
 	while (!trace_stack.empty())
