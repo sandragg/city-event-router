@@ -3,53 +3,71 @@ using namespace tracer;
 
 
 template<typename End_Cond_Tp, typename Heuristic_Tp>
-vector<RoutePoint> traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& predict)
+list_of_siblings::Tree<RoutePoint> traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& predict)
 {
 	auto matrix_size = dist_matrix.Size();
-	vector<RoutePoint> route;
 
-	int point = 0;
 	unordered_set<int> unvisited;
 	for (int i = 1; i < matrix_size; i++)
 		unvisited.insert(i);
 
 	time_t curr_time = 0;
-	// mb priority queue will help to go back step by step in case of false route.
-	priority_queue<
-		PriorityPoint<time_t>,
-		vector<PriorityPoint<time_t>>,
-		greater<>
-	> next_step;
 
-	while (!is_end(curr_time, unvisited))
+	list_of_siblings::Tree<RoutePoint> routes;
+	// 1) add entry point as a root in a routes tree
+	routes.Append(RoutePoint{ 1 });
+	tree::DfsIterator<decltype(routes)> current_point(routes);
+
+	while (!current_point.IsEnd())
 	{
-		// need to update curr_time and include min stay in place time
-		// how and where? :)
-		for (auto& id : unvisited)
+		if (is_end(curr_time, unvisited)) // change time when go back
 		{
-			next_step.push(
-				{
-					id,
-					dist_matrix[point][id] // here? base duration + distance
-					+ predict(
-						curr_time + dist_matrix[point][id],
-						unvisited,
-						id)
-				});
+			// should return unvisited points
+			++current_point;
+			continue;
 		}
-		auto next_point = next_step.top();
+		auto point = (*current_point).id;
+
+		{
+			// need to update curr_time and include min stay in place time
+			// how and where? :)
+			priority_queue<
+					PriorityPoint<time_t>,
+					vector<PriorityPoint<time_t>>,
+					greater<>
+			> next_step;
+
+			for (auto& id : unvisited)
+			{
+				next_step.push(
+					{
+						id,
+						dist_matrix[point][id] // here? base duration + distance
+						+ predict(
+							curr_time + dist_matrix[point][id],
+							unvisited,
+							id)
+					});
+			}
+			// 2) pop all elements from queue and add as children of the current node in a routes tree
+			vector<RoutePoint> children;
+			PriorityPoint<time_t> child;
+			while (!next_step.empty())
+			{
+				child = next_step.top();
+				next_step.pop();
+				children.emplace_back(RoutePoint{ child.id });
+			}
+			routes.Append(current_point.Get(), children);
+		}
+
+		++current_point;
+		auto next_point = *current_point;
 		// maybe here you should set final time duration for previous step.
 		curr_time += dist_matrix[point][next_point.id];
 
-		route.push_back(
-			{
-				next_point.id,
-				{curr_time, next_point.priority} // ???
-			});
-		next_step = decltype(next_step)();
 		unvisited.erase(next_point.id);
-		point = next_point.id;
 	}
 
-	return route;
+	return routes;
 }

@@ -72,7 +72,10 @@ struct RoutePoint
  * @return Array of route points
  */
 template<typename End_Cond_Tp, typename Heuristic_Tp>
-vector<RoutePoint> traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& predict);
+list_of_siblings::Tree<RoutePoint> traceGraph(
+	DistanceMatrix& dist_matrix,
+	End_Cond_Tp&& is_end,
+	Heuristic_Tp&& predict);
 
 #include "tracer.cpp"
 
