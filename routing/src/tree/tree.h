@@ -21,6 +21,8 @@ class Tree
 		using const_reference	= typename const_iterator::reference;
 		using difference_type	= typename iterator::difference_type;
 
+		virtual iterator Append(value_type root_value) = 0;
+		virtual iterator Append(iterator root, std::vector<value_type> &children) = 0;
 		virtual iterator Root() = 0;
 		virtual const_iterator Root() const = 0;
 		virtual reference Find(const_iterator position) = 0;

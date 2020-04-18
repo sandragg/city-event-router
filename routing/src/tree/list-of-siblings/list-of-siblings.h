@@ -27,6 +27,8 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 		using reference			= typename iterator::reference;
 		using const_reference	= typename const_iterator::reference;
 
+		iterator Append(value_type root_value) override;
+		iterator Append(iterator root, std::vector<value_type> &children) override;
 		iterator Root() override;
 		const_iterator Root() const override;
 		reference Find(const_iterator position) override;
