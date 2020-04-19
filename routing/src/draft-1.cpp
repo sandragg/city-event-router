@@ -1,4 +1,8 @@
-#include<limits>
+#ifndef ROUTING_IMPL_1
+#define ROUTING_IMPL_1
+
+#include <unordered_set>
+#include <limits>
 #include "route-context/route-context.h"
 
 
@@ -61,3 +65,5 @@ auto predict(route_context::RouteContext& ctx) {
 		return upcoming_time - result;
 	};
 };
+
+#endif
