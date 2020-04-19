@@ -30,6 +30,12 @@ typename TreeIterator<_Tp>::reference TreeIterator<_Tp>::operator*() const
 }
 
 template<class _Tp>
+typename TreeIterator<_Tp>::pointer TreeIterator<_Tp>::operator->() const
+{
+	return &*(*this);
+}
+
+template<class _Tp>
 TreeIterator<_Tp>& TreeIterator<_Tp>::operator++()
 {
 	cursor++;

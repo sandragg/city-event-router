@@ -24,6 +24,7 @@ class TreeIterator : public tree::TreeIterator<_Tp>
 		explicit TreeIterator(Tree<_Tp> *tree);
 		explicit TreeIterator(Tree<_Tp> *tree, position p);
 		reference operator*() const;
+		pointer operator->() const;
 		TreeIterator<_Tp>& operator++();
 		bool operator==(const TreeIterator<_Tp>& rhs) const;
 		bool operator!=(const TreeIterator<_Tp>& rhs) const;
