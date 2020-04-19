@@ -33,7 +33,7 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 		const_iterator Root() const override;
 		reference Find(const_iterator position) override;
 		const_reference Find(const_iterator position) const override;
-		iterator GetParent(const_iterator position) override;
+		iterator GetParent(iterator position) override;
 		const_iterator GetParent(const_iterator position) const override;
 		iterator GetLeftMostChild(const_iterator position) override;
 		const_iterator GetLeftMostChild(const_iterator position) const override;

@@ -27,7 +27,7 @@ class Tree
 		virtual const_iterator Root() const = 0;
 		virtual reference Find(const_iterator position) = 0;
 		virtual const_reference Find(const_iterator position) const = 0;
-		virtual iterator GetParent(const_iterator position) = 0;
+		virtual iterator GetParent(iterator position) = 0;
 		virtual const_iterator GetParent(const_iterator position) const = 0;
 		virtual iterator GetLeftMostChild(const_iterator position) = 0;
 		virtual const_iterator GetLeftMostChild(const_iterator position) const = 0;

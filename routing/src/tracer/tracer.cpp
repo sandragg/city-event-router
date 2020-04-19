@@ -20,10 +20,24 @@ list_of_siblings::Tree<RoutePoint> traceGraph(DistanceMatrix& dist_matrix, End_C
 
 	while (!current_point.IsEnd())
 	{
-		if (is_end(curr_time, unvisited)) // change time when go back
+		if (is_end(curr_time, unvisited)) // change time when go back !!!
 		{
-			// should return unvisited points
+			auto visited_point = current_point.Get();
+
 			++current_point;
+			if (current_point.IsEnd()) break;
+
+			/* Revert visited points to unvisited */
+			auto next_point_parent = routes.GetParent(current_point.Get());
+			do
+			{
+				unvisited.insert(visited_point->id);
+				visited_point = routes.GetParent(visited_point);
+
+			} while (visited_point != next_point_parent);
+			/* Mark next point as visited */
+			unvisited.erase(current_point.Get()->id);
+
 			continue;
 		}
 		auto point = (*current_point).id;
@@ -32,9 +46,9 @@ list_of_siblings::Tree<RoutePoint> traceGraph(DistanceMatrix& dist_matrix, End_C
 			// need to update curr_time and include min stay in place time
 			// how and where? :)
 			priority_queue<
-					PriorityPoint<time_t>,
-					vector<PriorityPoint<time_t>>,
-					greater<>
+				PriorityPoint<time_t>,
+				vector<PriorityPoint<time_t>>,
+				greater<>
 			> next_step;
 
 			for (auto& id : unvisited)
