@@ -9,8 +9,6 @@
 namespace timetable
 {
 
-using namespace std;
-
 enum WeekDay {
 	Sunday = 0,
 	Monday = 1,
@@ -22,20 +20,20 @@ enum WeekDay {
 	EveryDay = 7
 };
 
-class Place : public Timetable<forward_list<Interval>>
+class Place : public Timetable<std::forward_list<Interval>>
 {
 	public:
 		void AddInterval(const Interval& interval) override;
 
 		void RemoveInterval(const Interval& interval) override;
 
-		forward_list<Interval> GetInInterval(const Interval& interval, bool strict) const override;
+		std::forward_list<Interval> GetInInterval(const Interval& interval, bool strict) const override;
 
-		forward_list<Interval> GetAll() const override;
+		std::forward_list<Interval> GetAll() const override;
 
 	private:
 		// TODO: Choose appropriate data structure for repetitive schedule
-		forward_list<Interval> schedule;
+		std::forward_list<Interval> schedule;
 };
 
 } // namespace timetable

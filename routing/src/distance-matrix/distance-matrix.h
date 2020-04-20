@@ -46,7 +46,7 @@ class DistanceMatrix
 		/**
 		 * Get matrix size.
 		 */
-		const size_t Size() const;
+		size_t Size() const;
 
 	private:
 		int** matrix;

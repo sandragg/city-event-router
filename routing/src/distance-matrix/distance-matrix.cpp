@@ -51,7 +51,7 @@ DistanceMatrix& DistanceMatrix::Clear()
 	return *this;
 }
 
-const size_t DistanceMatrix::Size() const
+size_t DistanceMatrix::Size() const
 {
 	return size;
 }

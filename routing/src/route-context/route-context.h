@@ -2,14 +2,11 @@
 #define ROUTING_ROUTE_CONTEXT_H
 
 #include <iostream>
-#include <algorithm>
 #include <unordered_map>
-#include <queue>
 #include <vector>
 #include "../distance-matrix/distance-matrix.h"
 #include "../timetable/interval.h"
 #include "../models/waypoint.h"
-#include "../models/priority-point.h"
 #include "../models/custom-settings.h"
 
 
@@ -193,5 +190,6 @@ class RouteContext
 };
 
 } // namespace route_context
+
 
 #endif //ROUTING_ROUTE_CONTEXT_H

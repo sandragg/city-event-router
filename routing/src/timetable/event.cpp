@@ -1,6 +1,8 @@
 #include "event.h"
-using namespace timetable;
 
+
+namespace timetable
+{
 
 void Event::AddInterval(const Interval& interval)
 {
@@ -33,9 +35,9 @@ void Event::RemoveInterval(const Interval& interval)
 	}
 }
 
-forward_list<Interval> Event::GetInInterval(const Interval& interval, bool strict) const
+std::forward_list<Interval> Event::GetInInterval(const Interval& interval, bool strict) const
 {
-	forward_list<Interval> inclusions;
+	std::forward_list<Interval> inclusions;
 	auto prev_interval = inclusions.before_begin();
 
 	for (auto &range : schedule)
@@ -45,8 +47,8 @@ forward_list<Interval> Event::GetInInterval(const Interval& interval, bool stric
 
 		inclusions.emplace_after(
 			prev_interval,
-			strict ? max(range.start, interval.start) : range.start,
-			strict ? min(range.end, interval.end) : range.end
+			strict ? std::max(range.start, interval.start) : range.start,
+			strict ? std::min(range.end, interval.end) : range.end
 		);
 
 		++prev_interval;
@@ -55,9 +57,9 @@ forward_list<Interval> Event::GetInInterval(const Interval& interval, bool stric
 	return inclusions;
 }
 
-forward_list<Interval> Event::GetAll() const
+std::forward_list<Interval> Event::GetAll() const
 {
-	return forward_list<Interval>(schedule);
+	return std::forward_list<Interval>(schedule);
 }
 
 const Interval* Event::GetImmediate(time_t time) const
@@ -69,3 +71,5 @@ const Interval* Event::GetImmediate(time_t time) const
 	}
 	return nullptr;
 }
+
+} // namespace timetable

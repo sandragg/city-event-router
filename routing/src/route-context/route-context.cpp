@@ -1,7 +1,12 @@
-#include <map>
 #include "route-context.h"
-using namespace route_context;
 
+#include <map>
+#include <queue>
+#include <algorithm>
+
+
+namespace route_context
+{
 
 RouteContext::RouteContext(
 	const class DistanceMatrix& dist_matrix,
@@ -188,3 +193,5 @@ void RouteContext::BaseInitialization(const std::vector<Waypoint>& waypoints)
 			return point_id_to_index.at(lhs.id) < point_id_to_index.at(rhs.id);
 		});
 }
+
+} // namespace route_context

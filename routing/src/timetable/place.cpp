@@ -1,6 +1,8 @@
-#include <time.h>
 #include "place.h"
-using namespace timetable;
+
+
+namespace timetable
+{
 
 // TODO: Below is a brute force implementation copied from the Event class.
 // Need to choose more appropriate way to store recurring schedule
@@ -61,19 +63,19 @@ void Place::RemoveInterval(const Interval& interval)
 	}
 }
 
-forward_list<Interval> Place::GetInInterval(const Interval& interval, bool strict) const
+std::forward_list<Interval> Place::GetInInterval(const Interval& interval, bool strict) const
 {
-	forward_list<Interval> inclusions;
+	std::forward_list<Interval> inclusions;
 	auto prev_interval = inclusions.before_begin();
 
-	for (auto &range : schedule)
+	for (auto& range : schedule)
 	{
 		if (range.end <= interval.start) continue;
 
 		inclusions.emplace_after(
 				prev_interval,
-				strict ? max(range.start, interval.start) : range.start,
-				strict ? min(range.end, interval.end) : range.end
+				strict ? std::max(range.start, interval.start) : range.start,
+				strict ? std::min(range.end, interval.end) : range.end
 		);
 
 		++prev_interval;
@@ -82,7 +84,9 @@ forward_list<Interval> Place::GetInInterval(const Interval& interval, bool stric
 	return inclusions;
 }
 
-forward_list<Interval> Place::GetAll() const
+std::forward_list<Interval> Place::GetAll() const
 {
-	return forward_list<Interval>(schedule);
+	return std::forward_list<Interval>(schedule);
 }
+
+} // namespace timetable
