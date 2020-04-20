@@ -1,6 +1,8 @@
 #include "base-const-iterator.h"
-using namespace list_of_siblings;
 
+
+namespace list_of_siblings
+{
 
 template<class _Tp>
 ConstTreeIterator<_Tp>::ConstTreeIterator(std::nullptr_t)
@@ -55,3 +57,5 @@ bool ConstTreeIterator<_Tp>::operator!=(const ConstTreeIterator<_Tp> &rhs) const
 {
 	return !(*this == rhs);
 }
+
+} // namespace list_of_siblings

@@ -1,6 +1,9 @@
 #include "breadth-first-search.h"
 
 
+namespace tree
+{
+
 template<class _Container>
 BfsIterator<_Container>::BfsIterator(const container& tree)
 {
@@ -51,3 +54,5 @@ void BfsIterator<_Container>::traceIteration(const container &container, std::qu
 		return;
 	}
 }
+
+} // namespace tree

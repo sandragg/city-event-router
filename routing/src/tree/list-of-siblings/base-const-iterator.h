@@ -34,8 +34,6 @@ class ConstTreeIterator : public tree::TreeIterator<const _Tp>
 		position cursor;
 };
 
-#include "base-const-iterator.cpp"
-
 } // namespace list_of_siblings
 
 

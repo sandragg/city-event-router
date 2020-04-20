@@ -60,8 +60,6 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 		template<class> friend class ConstTreeIterator;
 };
 
-#include "list-of-siblings.cpp"
-
 } // namespace list_of_siblings
 
 

@@ -1,6 +1,9 @@
 #include "depth-first-search.h"
 
 
+namespace tree
+{
+
 template<class _Container>
 DfsIterator<_Container>::DfsIterator(const container& tree)
 {
@@ -52,3 +55,5 @@ void DfsIterator<_Container>::traceIteration(const container &container, std::st
 		return;
 	}
 }
+
+} // namespace tree

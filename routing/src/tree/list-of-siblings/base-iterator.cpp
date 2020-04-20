@@ -1,6 +1,8 @@
 #include "base-iterator.h"
-using namespace list_of_siblings;
 
+
+namespace list_of_siblings
+{
 
 template<class _Tp>
 TreeIterator<_Tp>::TreeIterator(std::nullptr_t)
@@ -53,3 +55,5 @@ bool TreeIterator<_Tp>::operator!=(const TreeIterator<_Tp> &rhs) const
 {
 	return !(*this == rhs);
 }
+
+} // namespace list_of_siblings

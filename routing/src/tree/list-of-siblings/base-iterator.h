@@ -34,8 +34,6 @@ class TreeIterator : public tree::TreeIterator<_Tp>
 		position cursor;
 };
 
-#include "base-iterator.cpp"
-
 } // namespace list_of_siblings
 
 

@@ -1,7 +1,7 @@
 #ifndef ROUTING_BREADTH_FIRST_SEARCH_H
 #define ROUTING_BREADTH_FIRST_SEARCH_H
 
-#include<queue>
+#include <queue>
 #include "../tree.h"
 
 
@@ -33,8 +33,6 @@ class BfsIterator
 
 		void traceIteration(const container &container, std::queue<iterator> &trace_queue);
 };
-
-#include "breadth-first-search.cpp"
 
 } // namespace tree
 

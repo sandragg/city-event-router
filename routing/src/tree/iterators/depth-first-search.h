@@ -1,7 +1,7 @@
 #ifndef ROUTING_DEPTH_FIRST_SEARCH_H
 #define ROUTING_DEPTH_FIRST_SEARCH_H
 
-#include<stack>
+#include <stack>
 #include "../tree.h"
 
 
@@ -33,8 +33,6 @@ class DfsIterator
 
 		void traceIteration(const container &container, std::stack<iterator> &trace_stack);
 };
-
-#include "depth-first-search.cpp"
 
 } // namespace tree
 
