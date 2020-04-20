@@ -1,13 +1,22 @@
 #include "tracer.h"
 
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include "../tree/iterators/depth-first-search.h"
+#include "../models/priority-point.h"
+
+
+namespace tracer
+{
 
 template<typename End_Cond_Tp, typename Heuristic_Tp>
-list_of_siblings::Tree<tracer::RoutePoint>
-tracer::traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& predict)
+list_of_siblings::Tree<RoutePoint>
+traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& predict)
 {
 	auto matrix_size = dist_matrix.Size();
 
-	unordered_set<int> unvisited;
+	std::unordered_set<int> unvisited;
 	for (int i = 1; i < matrix_size; i++)
 		unvisited.insert(i);
 
@@ -15,7 +24,7 @@ tracer::traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_
 
 	list_of_siblings::Tree<RoutePoint> routes;
 	// 1) add entry point as a root in a routes tree
-	routes.Append(RoutePoint{ 1 });
+	routes.Append(RoutePoint {1});
 	tree::DfsIterator<decltype(routes)> current_point(routes);
 
 	while (!current_point.IsEnd())
@@ -45,10 +54,10 @@ tracer::traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_
 		{
 			// need to update curr_time and include min stay in place time
 			// how and where? :)
-			priority_queue<
+			std::priority_queue<
 				PriorityPoint<time_t>,
-				vector<PriorityPoint<time_t>>,
-				greater<>
+				std::vector<PriorityPoint<time_t>>,
+				std::greater<>
 			> next_step;
 
 			for (auto& id : unvisited)
@@ -64,13 +73,13 @@ tracer::traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_
 					});
 			}
 			// 2) pop all elements from queue and add as children of the current node in a routes tree
-			vector<RoutePoint> children;
+			std::vector<RoutePoint> children;
 			PriorityPoint<time_t> child;
 			while (!next_step.empty())
 			{
 				child = next_step.top();
 				next_step.pop();
-				children.emplace_back(RoutePoint{ child.id });
+				children.emplace_back(RoutePoint {child.id});
 			}
 			routes.Append(current_point.Get(), children);
 		}
@@ -85,3 +94,5 @@ tracer::traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_
 
 	return routes;
 }
+
+} // namespace tracer
