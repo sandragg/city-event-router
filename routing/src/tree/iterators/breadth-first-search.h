@@ -21,7 +21,7 @@ class BfsIterator
 		using reference	= typename iterator::reference;
 
 	public:
-		explicit BfsIterator(const container &tree);
+		explicit BfsIterator(container &tree);
 		BfsIterator& operator++();
 		reference operator*();
 		bool IsEnd() const;
@@ -31,7 +31,7 @@ class BfsIterator
 		container *tree;
 		std::queue<iterator> queue;
 
-		void traceIteration(const container &container, std::queue<iterator> &trace_queue);
+		void traceIteration(container &container, std::queue<iterator> &trace_queue);
 };
 
 } // namespace tree

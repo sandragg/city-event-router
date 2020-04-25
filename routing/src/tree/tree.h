@@ -25,13 +25,13 @@ class Tree
 		virtual iterator Append(iterator root, std::vector<value_type> &children) = 0;
 		virtual iterator Root() = 0;
 		virtual const_iterator Root() const = 0;
-		virtual reference Find(const_iterator position) = 0;
+		virtual reference Find(iterator position) = 0;
 		virtual const_reference Find(const_iterator position) const = 0;
 		virtual iterator GetParent(iterator position) = 0;
 		virtual const_iterator GetParent(const_iterator position) const = 0;
-		virtual iterator GetLeftMostChild(const_iterator position) = 0;
+		virtual iterator GetLeftMostChild(iterator position) = 0;
 		virtual const_iterator GetLeftMostChild(const_iterator position) const = 0;
-		virtual iterator GetRightSibling(const_iterator position) = 0;
+		virtual iterator GetRightSibling(iterator position) = 0;
 		virtual const_iterator GetRightSibling(const_iterator position) const = 0;
 		virtual void Clear() = 0;
 		virtual size_t Depth() const = 0;

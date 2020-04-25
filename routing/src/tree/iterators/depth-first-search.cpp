@@ -5,7 +5,7 @@ namespace tree
 {
 
 template<class _Container>
-DfsIterator<_Container>::DfsIterator(const container& tree)
+DfsIterator<_Container>::DfsIterator(container& tree)
 {
 	this->tree = &tree;
 	stack.push(tree.Root());
@@ -39,7 +39,7 @@ DfsIterator<_Container>::Get() const
 }
 
 template<class _Container>
-void DfsIterator<_Container>::traceIteration(const container &container, std::stack<iterator> &trace_stack)
+void DfsIterator<_Container>::traceIteration(container &container, std::stack<iterator> &trace_stack)
 {
 	while (!trace_stack.empty())
 	{

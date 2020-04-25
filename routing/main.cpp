@@ -4,7 +4,12 @@
 #include "src/distance-matrix/distance-matrix.h"
 #include "src/tracer/tracer.h"
 #include "src/route-context/route-context.h"
-#include "src/draft-1.cpp"
+#include "src/draft-1.h"
+
+#include "src/tracer/tracer-impl.cpp"
+#include "src/tree/list-of-siblings/list-of-siblings-impl.cpp"
+#include "src/tree/iterators/iterators-impl.cpp"
+
 
 extern "C" {
 	int foo(int a, int b)
@@ -77,13 +82,12 @@ int main()
 
 	route_context::RouteContext ctx(dist, points);
 	auto route = tracer::traceGraph(dist, is_end(ctx), predict(ctx));
-	for (auto &r : route)
-	{
-		std::cout
-			<< r.id
-			<< " (" << r.time.start << "; " << r.time.end << ")"
-			<< std::endl;
-	}
-
+//	for (auto &r : route)
+//	{
+//		std::cout
+//			<< r.id
+//			<< " (" << r.time.start << "; " << r.time.end << ")"
+//			<< std::endl;
+//	}
 	return 0;
 }

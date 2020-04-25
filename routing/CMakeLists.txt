@@ -6,7 +6,6 @@ project(Routing VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-
 # Emscripten configuration (TODO revise)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
@@ -17,15 +16,11 @@ endif ()
 add_executable(
     Routing
     main.cpp
-    src/draft-1.cpp
     src/distance-matrix/distance-matrix.cpp
     src/route-context/route-context.cpp
     src/timetable/event.cpp
     src/timetable/place.cpp
-    src/models/custom-settings.cpp
-    src/tracer/tracer-impl.cpp
-    src/tree/list-of-siblings/list-of-siblings-impl.cpp
-    src/tree/iterators/iterators-impl.cpp)
+    src/models/custom-settings.cpp)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set_target_properties(routing PROPERTIES LINK_FLAGS

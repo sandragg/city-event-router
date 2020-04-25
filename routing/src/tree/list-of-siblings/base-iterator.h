@@ -2,12 +2,14 @@
 #define ROUTING_LIST_OF_SIBLINGS_BASE_ITERATOR_H
 
 #include <iostream>
-#include "list-of-siblings.h"
 #include "../tree.h"
 
 
 namespace list_of_siblings
 {
+
+template<class _Tp>
+class Tree;
 
 template<class _Tp>
 class TreeIterator : public tree::TreeIterator<_Tp>

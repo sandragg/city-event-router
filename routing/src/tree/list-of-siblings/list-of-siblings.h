@@ -4,16 +4,12 @@
 #include <vector>
 #include <forward_list>
 #include "../tree.h"
+#include "base-iterator.h"
+#include "base-const-iterator.h"
 
 
 namespace list_of_siblings
 {
-
-template<class _Tp>
-class TreeIterator;
-
-template<class _Tp>
-class ConstTreeIterator;
 
 template<class _Tp>
 class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
@@ -26,18 +22,18 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 		using const_iterator	= ConstTreeIterator<value_type>;
 		using reference			= typename iterator::reference;
 		using const_reference	= typename const_iterator::reference;
-
+		Tree(){}
 		iterator Append(value_type root_value) override;
 		iterator Append(iterator root, std::vector<value_type> &children) override;
 		iterator Root() override;
 		const_iterator Root() const override;
-		reference Find(const_iterator position) override;
+		reference Find(iterator position) override;
 		const_reference Find(const_iterator position) const override;
 		iterator GetParent(iterator position) override;
 		const_iterator GetParent(const_iterator position) const override;
-		iterator GetLeftMostChild(const_iterator position) override;
+		iterator GetLeftMostChild(iterator position) override;
 		const_iterator GetLeftMostChild(const_iterator position) const override;
-		iterator GetRightSibling(const_iterator position) override;
+		iterator GetRightSibling(iterator position) override;
 		const_iterator GetRightSibling(const_iterator position) const override;
 		void Clear() override;
 		size_t Depth() const override;

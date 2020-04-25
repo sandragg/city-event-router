@@ -21,7 +21,7 @@ class DfsIterator
 		using reference	= typename iterator::reference;
 
 	public:
-		explicit DfsIterator(const container &tree);
+		explicit DfsIterator(container &tree);
 		DfsIterator& operator++();
 		reference operator*();
 		bool IsEnd() const;
@@ -31,7 +31,7 @@ class DfsIterator
 		container *tree;
 		std::stack<iterator> stack;
 
-		void traceIteration(const container &container, std::stack<iterator> &trace_stack);
+		void traceIteration(container &container, std::stack<iterator> &trace_stack);
 };
 
 } // namespace tree

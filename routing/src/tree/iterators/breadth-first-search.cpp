@@ -5,7 +5,7 @@ namespace tree
 {
 
 template<class _Container>
-BfsIterator<_Container>::BfsIterator(const container& tree)
+BfsIterator<_Container>::BfsIterator(container& tree)
 {
 	this->tree = &tree;
 	queue.push(tree.Root());
@@ -39,7 +39,7 @@ tree::BfsIterator<_Container>::Get() const
 }
 
 template<class _Container>
-void BfsIterator<_Container>::traceIteration(const container &container, std::queue<iterator> &trace_queue)
+void BfsIterator<_Container>::traceIteration(container &container, std::queue<iterator> &trace_queue)
 {
 	while (!trace_queue.empty())
 	{
