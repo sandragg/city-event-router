@@ -19,11 +19,13 @@ class DfsIterator
 		    typename _Container::const_iterator>;
 		using iterator	= typename container::iterator;
 		using reference	= typename iterator::reference;
+		using pointer	= typename iterator::pointer;
 
 	public:
 		explicit DfsIterator(container &tree);
 		DfsIterator& operator++();
 		reference operator*();
+		pointer operator->();
 		bool IsEnd() const;
 		iterator Get() const;
 

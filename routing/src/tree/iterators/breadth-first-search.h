@@ -19,11 +19,13 @@ class BfsIterator
 		    typename _Container::const_iterator>;
 		using iterator	= typename container::iterator;
 		using reference	= typename iterator::reference;
+		using pointer	= typename iterator::pointer;
 
 	public:
 		explicit BfsIterator(container &tree);
 		BfsIterator& operator++();
 		reference operator*();
+		pointer operator->();
 		bool IsEnd() const;
 		iterator Get() const;
 

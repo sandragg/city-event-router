@@ -19,6 +19,12 @@ DfsIterator<_Container>::operator*()
 }
 
 template<class _Container>
+typename DfsIterator<_Container>::pointer DfsIterator<_Container>::operator->()
+{
+	return &*(*this);
+}
+
+template<class _Container>
 DfsIterator<_Container>& DfsIterator<_Container>::operator++()
 {
 	traceIteration(*tree, stack);

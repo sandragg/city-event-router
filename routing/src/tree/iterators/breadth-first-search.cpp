@@ -19,6 +19,12 @@ BfsIterator<_Container>::operator*()
 }
 
 template<class _Container>
+typename BfsIterator<_Container>::pointer BfsIterator<_Container>::operator->()
+{
+	return &*(*this);
+}
+
+template<class _Container>
 BfsIterator<_Container>& BfsIterator<_Container>::operator++()
 {
 	traceIteration(*tree, queue);
