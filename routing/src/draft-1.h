@@ -66,4 +66,15 @@ auto predict(route_context::RouteContext& ctx) {
 	};
 };
 
+auto calculate_start_time(route_context::RouteContext& ctx)
+{
+	return [&](int point_id, time_t& now) -> time_t
+	{
+		auto start_time = now + ctx.TimeBeforePointOpen(now, point_id);
+		now += ctx.MinStayTime();
+		return start_time;
+	};
+};
+
+
 #endif

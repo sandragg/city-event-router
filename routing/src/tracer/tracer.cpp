@@ -10,9 +10,13 @@
 namespace tracer
 {
 
-template<typename End_Cond_Tp, typename Heuristic_Tp>
+template<typename End_Cond_Tp, typename Heuristic_Tp, typename Time_Calculator_Tp>
 list_of_siblings::Tree<RoutePoint>
-traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& predict)
+traceGraph(
+	DistanceMatrix& dist_matrix,
+	End_Cond_Tp&& is_end,
+	Heuristic_Tp&& predict,
+	Time_Calculator_Tp&& calc_start_time)
 {
 	auto matrix_size = dist_matrix.Size();
 
@@ -29,9 +33,10 @@ traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& pre
 
 	while (!current_point.IsEnd())
 	{
-		if (is_end(curr_time, unvisited)) // change time when go back !!!
+		if (is_end(curr_time, unvisited))
 		{
 			auto visited_point = current_point.Get();
+			visited_point->time.start = curr_time;
 
 			++current_point;
 			if (current_point.IsEnd()) break;
@@ -44,16 +49,23 @@ traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& pre
 				visited_point = routes.GetParent(visited_point);
 
 			} while (visited_point != next_point_parent);
+
+			auto parent_id = next_point_parent->id;
+			auto current_point_id = current_point.Get()->id;
 			/* Mark next point as visited */
-			unvisited.erase(current_point.Get()->id);
+			unvisited.erase(current_point_id);
+			/* Reset time to a start time at the next point */
+			curr_time = next_point_parent->time.start
+				+ dist_matrix[parent_id][current_point_id];
+			/* Add time duration at the parent point */
+			calc_start_time(parent_id, curr_time);
 
 			continue;
 		}
 		auto point = (*current_point).id;
-
+		// set start time (considering time before open) + increase curr_time on min stay time
+		(*current_point).time.start = calc_start_time(point, curr_time);
 		{
-			// need to update curr_time and include min stay in place time
-			// how and where? :)
 			std::priority_queue<
 				PriorityPoint<time_t>,
 				std::vector<PriorityPoint<time_t>>,
@@ -65,7 +77,7 @@ traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& pre
 				next_step.push(
 					{
 						id,
-						dist_matrix[point][id] // here? base duration + distance
+						dist_matrix[point][id] // probably this distance is redundant
 						+ predict(
 							curr_time + dist_matrix[point][id],
 							unvisited,
@@ -86,7 +98,8 @@ traceGraph(DistanceMatrix& dist_matrix, End_Cond_Tp&& is_end, Heuristic_Tp&& pre
 
 		++current_point;
 		auto next_point = *current_point;
-		// maybe here you should set final time duration for previous step.
+		// duration for previous step will be computed later or independently.
+		// cause routes tree is shared and duration at one point for different routes is different too
 		curr_time += dist_matrix[point][next_point.id];
 
 		unvisited.erase(next_point.id);

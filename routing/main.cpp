@@ -81,7 +81,11 @@ int main()
 	}
 
 	route_context::RouteContext ctx(dist, points);
-	auto route = tracer::traceGraph(dist, is_end(ctx), predict(ctx));
+	auto route = tracer::traceGraph(
+		dist,
+		is_end(ctx),
+		predict(ctx),
+		calculate_start_time(ctx));
 //	for (auto &r : route)
 //	{
 //		std::cout

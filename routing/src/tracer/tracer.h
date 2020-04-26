@@ -33,6 +33,16 @@ using heuristic = time_t(*)(time_t now, std::unordered_set<int>& unvisited, int 
  * @return If tracing should be stopped - **true**, otherwise - **false**.
  */
 using end_condition = bool(*)(time_t now, std::unordered_set<int>& unvisited);
+/**
+ * Return start time at the point regarding to current time.
+ * Current time can be increased on a duration time in this point.
+ *
+ * @param point_id Current point
+ * @param now Current time
+ * @return 	Start time at the point with *point_id* in accordance with external constraints,
+ * 			such as time before open.
+ */
+using start_time_calculator = time_t(*)(int point_id, time_t& now);
 
 struct RoutePoint
 {
@@ -64,11 +74,12 @@ struct RoutePoint
  * @param predict %Point priority computation function
  * @return Array of route points
  */
-template<typename End_Cond_Tp, typename Heuristic_Tp>
+template<typename End_Cond_Tp, typename Heuristic_Tp, typename Time_Calculator_Tp>
 list_of_siblings::Tree<RoutePoint> traceGraph(
 	DistanceMatrix& dist_matrix,
 	End_Cond_Tp&& is_end,
-	Heuristic_Tp&& predict);
+	Heuristic_Tp&& predict,
+	Time_Calculator_Tp&& calc_start_time);
 
 } // namespace tracer
 
