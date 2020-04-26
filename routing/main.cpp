@@ -6,9 +6,7 @@
 #include "src/route-context/route-context.h"
 #include "src/draft-1.h"
 
-#include "src/tracer/tracer-impl.cpp"
-#include "src/tree/list-of-siblings/list-of-siblings-impl.cpp"
-#include "src/tree/iterators/iterators-impl.cpp"
+#include "src/implementations.cpp"
 
 
 extern "C" {
