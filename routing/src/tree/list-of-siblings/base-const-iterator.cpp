@@ -29,7 +29,7 @@ template<class _Tp>
 typename ConstTreeIterator<_Tp>::reference
 ConstTreeIterator<_Tp>::operator*() const
 {
-	return (*tree->nodes)[cursor].value;
+	return tree->nodes[cursor].value;
 }
 
 template<class _Tp>

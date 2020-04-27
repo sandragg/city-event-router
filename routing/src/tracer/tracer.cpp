@@ -26,7 +26,7 @@ traceGraph(
 
 	time_t curr_time = 0;
 
-	list_of_siblings::Tree<RoutePoint> routes;
+	list_of_siblings::Tree<RoutePoint> routes(matrix_size);
 	// 1) add entry point as a root in a routes tree
 	routes.Append(RoutePoint {1});
 	tree::DfsIterator<decltype(routes)> current_point(routes);

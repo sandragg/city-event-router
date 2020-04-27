@@ -28,7 +28,7 @@ TreeIterator<_Tp>::TreeIterator(Tree<_Tp> *tree, position p)
 template<class _Tp>
 typename TreeIterator<_Tp>::reference TreeIterator<_Tp>::operator*() const
 {
-	return (*tree->nodes)[cursor].value;
+	return tree->nodes[cursor].value;
 }
 
 template<class _Tp>
