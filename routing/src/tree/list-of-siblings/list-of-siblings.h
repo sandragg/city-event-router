@@ -59,8 +59,10 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 
 		void init_space_cursor(position begin);
 		void clear(position root_node);
+		void clear_descendants(position root_node);
 		position allocate_node();
 		void erase_node(position node_position);
+		position find_node_position(iterator node) const;
 };
 
 } // namespace list_of_siblings
