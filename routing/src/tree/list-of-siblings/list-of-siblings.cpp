@@ -20,7 +20,7 @@ typename Tree<_Tp>::iterator Tree<_Tp>::Append(value_type root_value)
 	root = allocate_node();
 	nodes[root].value = root_value;
 
-	return iterator(this, root);
+	return iterator(*this, root);
 }
 
 template<class _Tp>
@@ -45,38 +45,33 @@ Tree<_Tp>::Append(iterator root_node, std::vector<value_type> &descendants)
 template<class _Tp>
 typename Tree<_Tp>::iterator Tree<_Tp>::Root()
 {
-	return iterator(this, root);
+	return iterator(*this, root);
 }
 
 template<class _Tp>
 typename Tree<_Tp>::const_iterator Tree<_Tp>::Root() const
 {
-	return const_iterator(this, root);
-}
-
-template<class _Tp>
-typename Tree<_Tp>::reference
-Tree<_Tp>::Find(Tree::iterator position)
-{
-	throw std::out_of_range("aaa");
-}
-
-template<class _Tp>
-typename Tree<_Tp>::const_reference
-Tree<_Tp>::Find(Tree::const_iterator position) const
-{
-	throw std::out_of_range("aaa");
+	return const_iterator(*this, root);
 }
 
 template<class _Tp>
 typename Tree<_Tp>::iterator
-Tree<_Tp>::GetParent(Tree::iterator position)
+Tree<_Tp>::Find(Tree::const_iterator position) const
 {
-	throw std::out_of_range("aaa");
+	try
+	{
+		auto node_position = find_node_position(position);
+		return iterator(const_cast<Tree<_Tp>&>(*this), node_position);
+	}
+	catch (std::domain_error err)
+	{
+		std::cerr << err.what() << std::endl;
+		return End();
+	}
 }
 
 template<class _Tp>
-typename Tree<_Tp>::const_iterator
+typename Tree<_Tp>::iterator
 Tree<_Tp>::GetParent(Tree::const_iterator position) const
 {
 	throw std::out_of_range("aaa");
@@ -84,13 +79,6 @@ Tree<_Tp>::GetParent(Tree::const_iterator position) const
 
 template<class _Tp>
 typename Tree<_Tp>::iterator
-Tree<_Tp>::GetLeftMostChild(Tree::iterator position)
-{
-	throw std::out_of_range("aaa");
-}
-
-template<class _Tp>
-typename Tree<_Tp>::const_iterator
 Tree<_Tp>::GetLeftMostChild(Tree::const_iterator position) const
 {
 	throw std::out_of_range("aaa");
@@ -98,13 +86,6 @@ Tree<_Tp>::GetLeftMostChild(Tree::const_iterator position) const
 
 template<class _Tp>
 typename Tree<_Tp>::iterator
-Tree<_Tp>::GetRightSibling(Tree::iterator position)
-{
-	throw std::out_of_range("aaa");
-}
-
-template<class _Tp>
-typename Tree<_Tp>::const_iterator
 Tree<_Tp>::GetRightSibling(Tree::const_iterator position) const
 {
 	throw std::out_of_range("aaa");
@@ -134,15 +115,9 @@ bool Tree<_Tp>::Empty() const
 }
 
 template<class _Tp>
-typename Tree<_Tp>::iterator Tree<_Tp>::End()
+typename Tree<_Tp>::iterator Tree<_Tp>::End() const
 {
 	return iterator(nullptr);
-}
-
-template<class _Tp>
-typename Tree<_Tp>::const_iterator Tree<_Tp>::End() const
-{
-	return const_iterator(nullptr);
 }
 
 template<class _Tp>
@@ -197,7 +172,7 @@ void Tree<_Tp>::erase_node(position p)
 
 template<class _Tp>
 typename Tree<_Tp>::position
-Tree<_Tp>::find_node_position(Tree::iterator node) const
+Tree<_Tp>::find_node_position(Tree::const_iterator node) const
 {
 	auto value = *node;
 
@@ -221,7 +196,7 @@ Tree<_Tp>::find_node_position(Tree::iterator node) const
 		}
 	}
 
-	throw std::out_of_range("Node was not found.");
+	throw std::domain_error("Node was not found.");
 }
 
 } // namespace list_of_siblings

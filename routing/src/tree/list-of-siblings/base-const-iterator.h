@@ -23,8 +23,8 @@ class ConstTreeIterator : public tree::TreeIterator<const _Tp>
 		using reference		= typename base::reference;
 
 		explicit ConstTreeIterator(std::nullptr_t);
-		explicit ConstTreeIterator(const Tree<_Tp> *tree);
-		explicit ConstTreeIterator(const Tree<_Tp> *tree, position p);
+		explicit ConstTreeIterator(const Tree<_Tp> &tree);
+		explicit ConstTreeIterator(const Tree<_Tp> &tree, position p);
 		reference operator*() const;
 		pointer operator->() const;
 		ConstTreeIterator<_Tp>& operator++();

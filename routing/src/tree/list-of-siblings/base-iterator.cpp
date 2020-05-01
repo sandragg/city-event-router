@@ -12,16 +12,16 @@ TreeIterator<_Tp>::TreeIterator(std::nullptr_t)
 }
 
 template<class _Tp>
-TreeIterator<_Tp>::TreeIterator(Tree<_Tp> *tree)
+TreeIterator<_Tp>::TreeIterator(Tree<_Tp> &tree)
 {
-	this->tree = tree;
-	this->cursor = tree->root;
+	this->tree = &tree;
+	this->cursor = tree.root;
 }
 
 template<class _Tp>
-TreeIterator<_Tp>::TreeIterator(Tree<_Tp> *tree, position p)
+TreeIterator<_Tp>::TreeIterator(Tree<_Tp> &tree, position p)
 {
-	this->tree = tree;
+	this->tree = &tree;
 	this->cursor = p;
 }
 
@@ -54,6 +54,12 @@ template<class _Tp>
 bool TreeIterator<_Tp>::operator!=(const TreeIterator<_Tp> &rhs) const
 {
 	return !(*this == rhs);
+}
+
+template<class _Tp>
+TreeIterator<_Tp>::operator ConstTreeIterator<_Tp>() const
+{
+	return ConstTreeIterator(*tree, cursor);
 }
 
 } // namespace list_of_siblings

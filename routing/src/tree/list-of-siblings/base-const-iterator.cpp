@@ -12,16 +12,16 @@ ConstTreeIterator<_Tp>::ConstTreeIterator(std::nullptr_t)
 }
 
 template<class _Tp>
-ConstTreeIterator<_Tp>::ConstTreeIterator(const Tree<_Tp> *tree)
+ConstTreeIterator<_Tp>::ConstTreeIterator(const Tree<_Tp> &tree)
 {
-	this->tree = tree;
-	this->cursor = tree->root;
+	this->tree = &tree;
+	this->cursor = tree.root;
 }
 
 template<class _Tp>
-ConstTreeIterator<_Tp>::ConstTreeIterator(const Tree<_Tp> *tree, position p)
+ConstTreeIterator<_Tp>::ConstTreeIterator(const Tree<_Tp> &tree, position p)
 {
-	this->tree = tree;
+	this->tree = &tree;
 	this->cursor = p;
 }
 

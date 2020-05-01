@@ -28,19 +28,14 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 		iterator Append(iterator root, std::vector<value_type> &descendants) override;
 		iterator Root() override;
 		const_iterator Root() const override;
-		reference Find(iterator position) override;
-		const_reference Find(const_iterator position) const override;
-		iterator GetParent(iterator position) override;
-		const_iterator GetParent(const_iterator position) const override;
-		iterator GetLeftMostChild(iterator position) override;
-		const_iterator GetLeftMostChild(const_iterator position) const override;
-		iterator GetRightSibling(iterator position) override;
-		const_iterator GetRightSibling(const_iterator position) const override;
+		iterator Find(const_iterator position) const override;
+		iterator GetParent(const_iterator position) const override;
+		iterator GetLeftMostChild(const_iterator position) const override;
+		iterator GetRightSibling(const_iterator position) const override;
 		void Clear() override;
 		bool Empty() const override;
 		size_t Depth() const override;
-		iterator End() override;
-		const_iterator End() const override;
+		iterator End() const override;
 
 	private:
 		struct Node
@@ -62,7 +57,7 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 		void clear_descendants(position root_node);
 		position allocate_node();
 		void erase_node(position node_position);
-		position find_node_position(iterator node) const;
+		position find_node_position(const_iterator node) const;
 };
 
 } // namespace list_of_siblings
