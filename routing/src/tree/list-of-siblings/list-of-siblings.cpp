@@ -1,4 +1,5 @@
 #include "list-of-siblings.h"
+#include<algorithm>
 
 
 namespace list_of_siblings
@@ -56,11 +57,11 @@ typename Tree<_Tp>::const_iterator Tree<_Tp>::Root() const
 
 template<class _Tp>
 typename Tree<_Tp>::iterator
-Tree<_Tp>::Find(Tree::const_iterator position) const
+Tree<_Tp>::Find(const_iterator node) const
 {
 	try
 	{
-		auto node_position = find_node_position(position);
+		auto node_position = find_node_position(node);
 		return iterator(const_cast<Tree<_Tp>&>(*this), node_position);
 	}
 	catch (std::domain_error err)
@@ -72,23 +73,71 @@ Tree<_Tp>::Find(Tree::const_iterator position) const
 
 template<class _Tp>
 typename Tree<_Tp>::iterator
-Tree<_Tp>::GetParent(Tree::const_iterator position) const
+Tree<_Tp>::GetParent(const_iterator node) const
 {
-	throw std::out_of_range("aaa");
+	if (node == Root()) return End();
+
+	try
+	{
+		auto parent_position = find_node_parent(node);
+		return iterator(const_cast<Tree<_Tp>&>(*this), parent_position);
+	}
+	catch (std::domain_error err)
+	{
+		std::cerr << err.what() << std::endl;
+		return End();
+	}
 }
 
 template<class _Tp>
 typename Tree<_Tp>::iterator
-Tree<_Tp>::GetLeftMostChild(Tree::const_iterator position) const
+Tree<_Tp>::GetLeftMostChild(const_iterator node) const
 {
-	throw std::out_of_range("aaa");
+	try
+	{
+		auto node_position = find_node_position(node);
+		auto descendants = nodes[node_position].descendants;
+
+		if (!descendants.empty())
+			return iterator(const_cast<Tree<_Tp>&>(*this), descendants.front());
+	}
+	catch (std::domain_error err)
+	{
+		std::cerr << err.what() << std::endl;
+	}
+
+	return End();
 }
 
 template<class _Tp>
 typename Tree<_Tp>::iterator
-Tree<_Tp>::GetRightSibling(Tree::const_iterator position) const
+Tree<_Tp>::GetRightSibling(const_iterator node) const
 {
-	throw std::out_of_range("aaa");
+	try
+	{
+		auto parent_position = find_node_parent(node);
+		auto descendants_list = nodes[parent_position].descendants;
+
+		auto value = *node;
+
+		auto descendant = std::find_if(
+			descendants_list.begin(),
+			descendants_list.end(),
+			[&](position p)
+			{
+				return &nodes[p].value == &value;
+			});
+
+		auto next_sibling = ++descendant;
+		if (next_sibling != descendants_list.end())
+			return iterator(const_cast<Tree<_Tp>&>(*this), *next_sibling);
+	}
+	catch (std::domain_error err)
+	{
+		std::cerr << err.what() << std::endl;
+	}
+
+	return End();
 }
 
 template<class _Tp>
@@ -100,12 +149,6 @@ void Tree<_Tp>::Clear()
 		init_space_cursor(0);
 		root = space_cursor;
 	}
-}
-
-template<class _Tp>
-size_t Tree<_Tp>::Depth() const
-{
-	throw std::out_of_range("aaa");
 }
 
 template<class _Tp>
@@ -130,13 +173,29 @@ void Tree<_Tp>::init_space_cursor(position begin)
 }
 
 template<class _Tp>
-void Tree<_Tp>::clear(Tree::position root_node)
+void Tree<_Tp>::clear(position root_node)
 {
+	std::queue<position> trace_queue;
+	trace_queue.push(root_node);
 
+	while (!trace_queue.empty())
+	{
+		auto current_node = trace_queue.front();
+		trace_queue.pop();
+
+		auto descendants = nodes[current_node].descendants;
+		auto next_node = descendants.begin();
+		while (next_node != descendants.end())
+		{
+			trace_queue.push(*next_node);
+			next_node++;
+		}
+		erase_node(current_node);
+	}
 }
 
 template<class _Tp>
-void Tree<_Tp>::clear_descendants(Tree::position root_node)
+void Tree<_Tp>::clear_descendants(position root_node)
 {
 	auto &descendants_list = nodes[root_node].descendants;
 	auto descendant = descendants_list.begin();
@@ -172,7 +231,7 @@ void Tree<_Tp>::erase_node(position p)
 
 template<class _Tp>
 typename Tree<_Tp>::position
-Tree<_Tp>::find_node_position(Tree::const_iterator node) const
+Tree<_Tp>::find_node_position(const_iterator node) const
 {
 	auto value = *node;
 
@@ -197,6 +256,33 @@ Tree<_Tp>::find_node_position(Tree::const_iterator node) const
 	}
 
 	throw std::domain_error("Node was not found.");
+}
+
+template<class _Tp>
+typename Tree<_Tp>::position
+Tree<_Tp>::find_node_parent(const_iterator node) const
+{
+	auto value = *node;
+
+	std::queue<position> trace_queue;
+	trace_queue.push(root);
+
+	while (!trace_queue.empty())
+	{
+		auto current_node = trace_queue.front();
+		trace_queue.pop();
+
+		auto descendants = nodes[current_node].descendants;
+		auto next_node = descendants.begin();
+		while (next_node != descendants.end())
+		{
+			if (&value == &nodes[*next_node].value) return current_node;
+			trace_queue.push(*next_node);
+			next_node++;
+		}
+	}
+
+	throw std::domain_error("Parent was not found.");
 }
 
 } // namespace list_of_siblings

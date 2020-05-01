@@ -31,7 +31,6 @@ class Tree
 		virtual iterator GetRightSibling(const_iterator position) const = 0;
 		virtual void Clear() = 0;
 		virtual bool Empty() const = 0;
-		virtual size_t Depth() const = 0;
 		virtual iterator End() const = 0;
 };
 
