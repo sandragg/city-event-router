@@ -39,24 +39,79 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 	private:
 		struct Node
 		{
+			/**
+			 * Position of the next free node.
+			 * It's used to link elements of the free nodes list.
+			 * @see #space_cursor
+			 */
 			position next_free;
 			value_type value;
-			std::forward_list<size_t> descendants;
+			std::forward_list<position> descendants;
 		};
-
+		/**
+		 * Nodes container.
+		 * Includes both used and free nodes.
+		 */
 		std::vector<Node> nodes;
+		/**
+		 * Position of the tree root.
+		 */
 		position root;
+		/**
+		 * Position of the first free node (free nodes list head).
+		 */
 		position space_cursor;
 
 		template<class> friend class TreeIterator;
 		template<class> friend class ConstTreeIterator;
 
+		/**
+		 * Initialize free nodes.
+		 * Set #space_cursor to *begin* position.
+		 * Append nodes from *begin* position to #nodes.size
+		 * to the free nodes list.
+		 *
+		 * @param begin Start position of the free nodes
+		 */
 		void init_space_cursor(position begin);
+		/**
+		 * Clear subtree including root node.
+		 *
+		 * @param root_node Subtree root position
+		 */
 		void clear(position root_node);
+		/**
+		 * Clear subtree NOT including the root node.
+		 *
+		 * @param root_node Subtree root position
+		 */
 		void clear_descendants(position root_node);
+		/**
+		 * Get new node position.
+		 */
 		position allocate_node();
+		/**
+		 * Remove node.
+		 * Return position to the free nodes list.
+		 *
+		 * @param root_node Node position to erase
+		 */
 		void erase_node(position node_position);
+		/**
+		 * Find node position.
+		 *
+		 * @param node Iterator to the node
+		 * @return Node position
+		 * @throw domain_error If node wasn't found.
+		 */
 		position find_node_position(const_iterator node) const;
+		/**
+		 * Find the parent node position.
+		 *
+		 * @param node Iterator to the node
+		 * @return Parent position
+		 * @throw domain_error If parent wasn't found.
+		 */
 		position find_node_parent(const_iterator node) const;
 };
 
