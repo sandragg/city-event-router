@@ -5,6 +5,7 @@ project(Routing VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/modules/local")
 
 # Emscripten configuration (TODO revise)
 
@@ -45,3 +46,4 @@ install(FILES "${PROJECT_BINARY_DIR}/RoutingConfig.h"
 # Documentation
 
 add_subdirectory(docs)
+add_subdirectory(tests)

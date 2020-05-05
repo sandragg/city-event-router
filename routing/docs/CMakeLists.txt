@@ -1,3 +1,5 @@
+set(DOXYGEN_EXECUTABLE "${CMAKE_MODULE_PATH}/bin/doxygen")
+
 find_package(Doxygen)
 
 if (Doxygen_FOUND)
