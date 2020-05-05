@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+// TODO Think about Clear method and structure to store matrix
 
 /**
  * Stores distance between points.
