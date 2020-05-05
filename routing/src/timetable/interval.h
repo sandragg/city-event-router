@@ -13,7 +13,7 @@ struct Interval
 
 	Interval(time_t s, time_t e) : start(s), end(e) {}
 
-	bool operator==(const Interval& rhs)
+	bool operator==(const Interval& rhs) const
 	{
 		return this->start == rhs.start && this->end == rhs.end;
 	}
