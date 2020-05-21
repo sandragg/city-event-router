@@ -57,4 +57,19 @@ TEST_CASE("Event timetable", "[timetable]")
 		REQUIRE(schedule.GetAll() == intervals);
 	}
 
+	SECTION("Get closest timetable interval")
+	{
+		const timetable::Interval *interval;
+
+		interval = schedule.GetImmediate(3);
+		REQUIRE((interval && *interval == timetable::Interval(2, 4)));
+
+		interval = schedule.GetImmediate(5);
+		REQUIRE((interval && *interval == timetable::Interval(4, 5)));
+
+		interval = schedule.GetImmediate(6);
+		REQUIRE((interval && *interval == timetable::Interval(7, 10)));
+
+		REQUIRE(schedule.GetImmediate(15) == nullptr);
+	}
 }

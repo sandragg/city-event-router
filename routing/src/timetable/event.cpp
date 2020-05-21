@@ -66,7 +66,7 @@ const Interval* Event::GetImmediate(time_t time) const
 {
 	for (auto &range : schedule)
 	{
-		if (range.end <= time) continue;
+		if (range.end < time) continue;
 		return &range;
 	}
 	return nullptr;
