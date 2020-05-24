@@ -9,18 +9,13 @@
 
 TEST_CASE("Route context", "[RouteContext]")
 {
-//	timetable::Event schedule;
-//	schedule.AddInterval({ 0, 1 });
-//	schedule.AddInterval({ 7, 10 });
-//	schedule.AddInterval({ 2, 4 });
-//	schedule.AddInterval({ 4, 5 });
 	size_t amount = 4;
 
 	std::vector<Waypoint> points(amount);
 	std::vector<timetable::Interval> schedule({
 		{ 0, 20 },
 		{ 5, 15 },
-		{ 12, 20 },
+		{ 12, 21 },
 		{ 5, 10 }
 	});
 
@@ -118,6 +113,59 @@ TEST_CASE("Route context", "[RouteContext]")
 				auto time_before_open = closest_interval->start - current_time;
 				REQUIRE(ctx.TimeBeforePointOpen(current_time, p.id) == time_before_open);
 			}
+		}
+	}
+
+	SECTION("Iterate over upcoming points")
+	{
+		/* Point id to closing time. */
+		using simplified_point = std::pair<int, time_t>;
+
+		std::vector<simplified_point> simplified_points;
+		simplified_points.reserve(points.size());
+
+		for (const auto& p : points)
+		{
+			simplified_points.emplace_back(
+				p.id,
+				p.schedule.GetAll().front().end
+			);
+		}
+		std::sort(
+			simplified_points.begin(),
+			simplified_points.end(),
+			[](const simplified_point& lhs, const simplified_point& rhs){
+				return lhs.second <= rhs.second;
+			});
+
+		SECTION("Increment upcoming point via time")
+		{
+			for (const auto& point : simplified_points)
+			{
+				REQUIRE(ctx.UpcomingExists());
+				REQUIRE(ctx.UpcomingPointId() == point.first);
+
+				auto latest_time = point.second - ctx.MinStayTime();
+				REQUIRE(ctx.UpcomingTime() == latest_time);
+
+				ctx.UpdateOnNewTick(ctx.UpcomingTime() + 1);
+			}
+			REQUIRE_FALSE(ctx.UpcomingExists());
+		}
+
+		SECTION("Increment upcoming point via skipping")
+		{
+			for (const auto& point : simplified_points)
+			{
+				REQUIRE(ctx.UpcomingExists());
+				REQUIRE(ctx.UpcomingPointId() == point.first);
+
+				auto latest_time = point.second - ctx.MinStayTime();
+				REQUIRE(ctx.UpcomingTime() == latest_time);
+
+				ctx.SkipUpcomingPoint();
+			}
+			REQUIRE_FALSE(ctx.UpcomingExists());
 		}
 	}
 }
