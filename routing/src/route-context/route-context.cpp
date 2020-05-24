@@ -79,7 +79,8 @@ void RouteContext::SkipUpcomingPoint()
 
 int RouteContext::PointPriority(int point_id) const
 {
-	return priorities ? (*priorities)[point_id_to_index.at(point_id)] : 1;
+	auto index = point_id_to_index.at(point_id);
+	return priorities ? (*priorities)[index] : 1;
 }
 
 const DistanceMatrix& RouteContext::DistanceMatrix() const
@@ -125,6 +126,11 @@ time_t RouteContext::ExtraTimeFee() const
 time_t RouteContext::MinStayTime() const
 {
 	return min_stay_time;
+}
+
+const timetable::Interval* RouteContext::TimeRange() const
+{
+	return time_range;
 }
 
 bool RouteContext::IsPointOpen(time_t now, int point_id) const

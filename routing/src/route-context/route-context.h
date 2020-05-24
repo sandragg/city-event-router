@@ -125,6 +125,10 @@ class RouteContext
 		 * Get minimum stay time.
 		 */
 		time_t MinStayTime() const;
+		/**
+		 * Get time interval for route.
+		 */
+		const timetable::Interval* TimeRange() const;
 
 	private:
 		/*
