@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 #include <forward_list>
-#include "event.cpp"
+#include "event.h"
 
 TEST_CASE("Event timetable", "[timetable]")
 {

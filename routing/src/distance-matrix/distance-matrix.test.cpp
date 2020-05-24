@@ -1,5 +1,5 @@
 #include <catch2/catch.hpp>
-#include "distance-matrix.cpp"
+#include "distance-matrix.h"
 
 TEST_CASE("Distance matrix", "[DistanceMatrix]")
 {
