@@ -103,7 +103,7 @@ int RouteContext::UpcomingPointId() const
 	return points[upcoming].id;
 }
 
-bool RouteContext::PastTime() const
+int RouteContext::PastTime() const
 {
 	return RouteContext::PAST_TIME;
 }

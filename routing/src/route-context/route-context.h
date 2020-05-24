@@ -80,13 +80,16 @@ class RouteContext
 	 	 *
 	 	 * @param now Current time
 		 * @param point_id %Point id
-	 	 * @return Time difference
+	 	 * @return If there is no interval now or later - #PastTime,
+	 	 * 		if point is open now - 0,
+	 	 * 		otherwise - time difference.
 	 	 */
 		time_t TimeBeforePointOpen(time_t now, int point_id) const;
 		/**
 		 * Get priority of a point with a *point_id*.
 		 * @param point_id %Point id
 		 * @return %Point priority
+		 * @throw std::out_of_range Point doesn't exist
 		 */
 		int PointPriority(int point_id) const;
 		/**
@@ -108,7 +111,7 @@ class RouteContext
 		/**
 		 * Get the passed time indicator.
 		 */
-		bool PastTime() const;
+		int PastTime() const;
 		/**
 		 * Get late fee.
 		 */

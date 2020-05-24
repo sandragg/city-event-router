@@ -1,4 +1,5 @@
 #include <catch2/catch.hpp>
+#include <exception>
 #include <vector>
 #include "../timetable/event.h"
 #include "../distance-matrix/distance-matrix.h"
@@ -19,7 +20,7 @@ TEST_CASE("Route context", "[RouteContext]")
 	std::vector<timetable::Interval> schedule({
 		{ 0, 20 },
 		{ 5, 15 },
-		{ 0, 20 },
+		{ 12, 20 },
 		{ 5, 10 }
 	});
 
@@ -50,6 +51,7 @@ TEST_CASE("Route context", "[RouteContext]")
 			REQUIRE(ctx.TimeBeforeOpenFee() == settings.time_before_open_fee);
 			REQUIRE(ctx.TimeRange() == settings.time_range);
 		}
+
 		SECTION("Check point default priority")
 		{
 			auto default_priority = 1;
@@ -59,7 +61,14 @@ TEST_CASE("Route context", "[RouteContext]")
 
 	SECTION("Create context with custom settings")
 	{
+		std::vector<PriorityPoint<int>> priorities({
+		   { 0, 5 },
+		   { 1, 2 },
+		   { 2, 1 },
+		   { 3, 2 }
+		});
 		CustomSettings settings;
+		settings.points_priorities = &priorities;
 		route_context::RouteContext ctx(mtx, points, settings);
 
 		SECTION("Check custom settings")
@@ -69,6 +78,46 @@ TEST_CASE("Route context", "[RouteContext]")
 			REQUIRE(ctx.MinStayTime() == settings.min_stay_time);
 			REQUIRE(ctx.TimeBeforeOpenFee() == settings.time_before_open_fee);
 			REQUIRE(ctx.TimeRange() == settings.time_range);
+		}
+
+		SECTION("Check point custom priority")
+		{
+			for (const auto& p : priorities)
+				REQUIRE(ctx.PointPriority(p.id) == p.priority);
+
+			REQUIRE_THROWS_AS(ctx.PointPriority(points.size()), std::out_of_range);
+		}
+	}
+
+	CustomSettings settings;
+	route_context::RouteContext ctx(mtx, points, settings);
+
+	SECTION("Check time before open")
+	{
+		auto current_time = 11;
+
+		for (const auto& p : points)
+		{
+			auto closest_interval = p.schedule.GetImmediate(current_time);
+
+			auto is_open = closest_interval
+				? current_time >= closest_interval->start
+				: false;
+			REQUIRE(is_open == ctx.IsPointOpen(current_time, p.id));
+
+			if (is_open)
+			{
+				REQUIRE(ctx.TimeBeforePointOpen(current_time, p.id) == 0);
+			}
+			else if (!closest_interval)
+			{
+				REQUIRE(ctx.TimeBeforePointOpen(current_time, p.id) == ctx.PastTime());
+			}
+			else
+			{
+				auto time_before_open = closest_interval->start - current_time;
+				REQUIRE(ctx.TimeBeforePointOpen(current_time, p.id) == time_before_open);
+			}
 		}
 	}
 }
