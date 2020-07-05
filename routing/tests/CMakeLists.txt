@@ -7,7 +7,13 @@ if (Catch2_FOUND)
     add_executable(
         Routing_tests
         test_main.cpp
-        ${TEST_SOURCE_FILES})
+        ${TEST_SOURCE_FILES}
+        ../src/distance-matrix/distance-matrix.cpp
+        ../src/route-context/route-context.cpp
+        ../src/timetable/event.cpp
+        ../src/timetable/place.cpp
+        ../src/models/custom-settings.cpp
+        ../src/test-implementations.cpp)
     target_link_libraries(Routing_tests Catch2::Catch2)
 
     include(CTest)
