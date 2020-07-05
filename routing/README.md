@@ -2,7 +2,7 @@ Routing
 =======
 
 ## Introduction
-Routing is a program for computing all possible routes based a on set of way points
+Routing is a program for computing all possible routes based on a set of way points
 and custom preferences.
  
 Route priorities:
