@@ -11,12 +11,12 @@ namespace tree
 /**
  * Breadth First Search iterator.
  */
-template<class _Container>
+template<class Container>
 class BfsIterator
 {
 		using container	= Tree<
-		    typename _Container::iterator,
-		    typename _Container::const_iterator>;
+		    typename Container::iterator,
+		    typename Container::const_iterator>;
 		using iterator	= typename container::iterator;
 		using reference	= typename iterator::reference;
 		using pointer	= typename iterator::pointer;

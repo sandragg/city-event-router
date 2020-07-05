@@ -4,48 +4,48 @@
 namespace tree
 {
 
-template<class _Container>
-DfsIterator<_Container>::DfsIterator(container& tree)
+template<class Container>
+DfsIterator<Container>::DfsIterator(container& tree)
 {
 	this->tree = &tree;
 	stack.push(tree.Root());
 }
 
-template<class _Container>
-typename DfsIterator<_Container>::reference
-DfsIterator<_Container>::operator*()
+template<class Container>
+typename DfsIterator<Container>::reference
+DfsIterator<Container>::operator*()
 {
 	return *stack.top();
 }
 
-template<class _Container>
-typename DfsIterator<_Container>::pointer DfsIterator<_Container>::operator->()
+template<class Container>
+typename DfsIterator<Container>::pointer DfsIterator<Container>::operator->()
 {
 	return &*(*this);
 }
 
-template<class _Container>
-DfsIterator<_Container>& DfsIterator<_Container>::operator++()
+template<class Container>
+DfsIterator<Container>& DfsIterator<Container>::operator++()
 {
 	traceIteration(*tree, stack);
 	return *this;
 }
 
-template<class _Container>
-bool DfsIterator<_Container>::IsEnd() const
+template<class Container>
+bool DfsIterator<Container>::IsEnd() const
 {
 	return stack.empty();
 }
 
-template<class _Container>
-typename DfsIterator<_Container>::iterator
-DfsIterator<_Container>::Get() const
+template<class Container>
+typename DfsIterator<Container>::iterator
+DfsIterator<Container>::Get() const
 {
 	return stack.top();
 }
 
-template<class _Container>
-void DfsIterator<_Container>::traceIteration(container &container, std::stack<iterator> &trace_stack)
+template<class Container>
+void DfsIterator<Container>::traceIteration(container &container, std::stack<iterator> &trace_stack)
 {
 	while (!trace_stack.empty())
 	{

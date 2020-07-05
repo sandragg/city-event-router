@@ -9,13 +9,13 @@
  *
  * @tparam _Tp Priority type
  */
-template<class _Tp>
+template<class Tp>
 struct PriorityPoint
 {
 	int id;
-	_Tp priority;
+	Tp priority;
 
-	bool operator>(const PriorityPoint<_Tp>& rhs)
+	bool operator>(const PriorityPoint<Tp>& rhs)
 	{
 		return this->priority > rhs.priority;
 	}

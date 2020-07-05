@@ -14,7 +14,7 @@ namespace timetable
  * Stores point's schedule.
  * @tparam _Tp Container
  */
-template<class _Tp>
+template<class Tp>
 class Timetable
 {
 	public:
@@ -36,11 +36,11 @@ class Timetable
 		 * 					**false** - return extreme intervals entirely.
 		 * @return Intersection of *interval* and timetable.
 		 */
-		virtual _Tp GetInInterval(const Interval &interval, bool strict) const = 0;
+		virtual Tp GetInInterval(const Interval &interval, bool strict) const = 0;
 		/**
 		 * Get full schedule.
 		 */
-		virtual _Tp GetAll() const = 0;
+		virtual Tp GetAll() const = 0;
 		/**
 		 * Get nearest working interval.
 		 * Find interval which includes received *time*.

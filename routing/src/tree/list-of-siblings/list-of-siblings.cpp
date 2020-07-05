@@ -1,20 +1,21 @@
 #include "list-of-siblings.h"
 #include<algorithm>
+#include <queue>
 
 
 namespace list_of_siblings
 {
 
-template<class _Tp>
-Tree<_Tp>::Tree(size_t size)
+template<class Tp>
+Tree<Tp>::Tree(size_t size)
 {
 	nodes.resize(size);
 	init_space_cursor(0);
 	root = space_cursor;
 }
 
-template<class _Tp>
-typename Tree<_Tp>::iterator Tree<_Tp>::Append(value_type root_value)
+template<class Tp>
+typename Tree<Tp>::iterator Tree<Tp>::Append(value_type root_value)
 {
 	Clear();
 
@@ -24,9 +25,9 @@ typename Tree<_Tp>::iterator Tree<_Tp>::Append(value_type root_value)
 	return iterator(*this, root);
 }
 
-template<class _Tp>
-typename Tree<_Tp>::iterator
-Tree<_Tp>::Append(iterator root_node, std::vector<value_type> &descendants)
+template<class Tp>
+typename Tree<Tp>::iterator
+Tree<Tp>::Append(iterator root_node, std::vector<value_type> &descendants)
 {
 	auto root_position = find_node_position(root_node);
 	clear_descendants(root_position);
@@ -43,26 +44,26 @@ Tree<_Tp>::Append(iterator root_node, std::vector<value_type> &descendants)
 	return root_node;
 }
 
-template<class _Tp>
-typename Tree<_Tp>::iterator Tree<_Tp>::Root()
+template<class Tp>
+typename Tree<Tp>::iterator Tree<Tp>::Root()
 {
 	return iterator(*this, root);
 }
 
-template<class _Tp>
-typename Tree<_Tp>::const_iterator Tree<_Tp>::Root() const
+template<class Tp>
+typename Tree<Tp>::const_iterator Tree<Tp>::Root() const
 {
 	return const_iterator(*this, root);
 }
 
-template<class _Tp>
-typename Tree<_Tp>::iterator
-Tree<_Tp>::Find(const_iterator node) const
+template<class Tp>
+typename Tree<Tp>::iterator
+Tree<Tp>::Find(const_iterator node) const
 {
 	try
 	{
 		auto node_position = find_node_position(node);
-		return iterator(const_cast<Tree<_Tp>&>(*this), node_position);
+		return iterator(const_cast<Tree<Tp>&>(*this), node_position);
 	}
 	catch (std::domain_error err)
 	{
@@ -71,16 +72,16 @@ Tree<_Tp>::Find(const_iterator node) const
 	}
 }
 
-template<class _Tp>
-typename Tree<_Tp>::iterator
-Tree<_Tp>::GetParent(const_iterator node) const
+template<class Tp>
+typename Tree<Tp>::iterator
+Tree<Tp>::GetParent(const_iterator node) const
 {
 	if (node == Root()) return End();
 
 	try
 	{
 		auto parent_position = find_node_parent(node);
-		return iterator(const_cast<Tree<_Tp>&>(*this), parent_position);
+		return iterator(const_cast<Tree<Tp>&>(*this), parent_position);
 	}
 	catch (std::domain_error err)
 	{
@@ -89,9 +90,9 @@ Tree<_Tp>::GetParent(const_iterator node) const
 	}
 }
 
-template<class _Tp>
-typename Tree<_Tp>::iterator
-Tree<_Tp>::GetLeftMostChild(const_iterator node) const
+template<class Tp>
+typename Tree<Tp>::iterator
+Tree<Tp>::GetLeftMostChild(const_iterator node) const
 {
 	try
 	{
@@ -99,7 +100,7 @@ Tree<_Tp>::GetLeftMostChild(const_iterator node) const
 		auto descendants = nodes[node_position].descendants;
 
 		if (!descendants.empty())
-			return iterator(const_cast<Tree<_Tp>&>(*this), descendants.front());
+			return iterator(const_cast<Tree<Tp>&>(*this), descendants.front());
 	}
 	catch (std::domain_error err)
 	{
@@ -109,9 +110,9 @@ Tree<_Tp>::GetLeftMostChild(const_iterator node) const
 	return End();
 }
 
-template<class _Tp>
-typename Tree<_Tp>::iterator
-Tree<_Tp>::GetRightSibling(const_iterator node) const
+template<class Tp>
+typename Tree<Tp>::iterator
+Tree<Tp>::GetRightSibling(const_iterator node) const
 {
 	try
 	{
@@ -130,7 +131,7 @@ Tree<_Tp>::GetRightSibling(const_iterator node) const
 
 		auto next_sibling = ++descendant;
 		if (next_sibling != descendants_list.end())
-			return iterator(const_cast<Tree<_Tp>&>(*this), *next_sibling);
+			return iterator(const_cast<Tree<Tp>&>(*this), *next_sibling);
 	}
 	catch (std::domain_error err)
 	{
@@ -140,8 +141,8 @@ Tree<_Tp>::GetRightSibling(const_iterator node) const
 	return End();
 }
 
-template<class _Tp>
-void Tree<_Tp>::Clear()
+template<class Tp>
+void Tree<Tp>::Clear()
 {
 	if (!Empty())
 	{
@@ -151,20 +152,20 @@ void Tree<_Tp>::Clear()
 	}
 }
 
-template<class _Tp>
-bool Tree<_Tp>::Empty() const
+template<class Tp>
+bool Tree<Tp>::Empty() const
 {
 	return root == space_cursor;
 }
 
-template<class _Tp>
-typename Tree<_Tp>::iterator Tree<_Tp>::End() const
+template<class Tp>
+typename Tree<Tp>::iterator Tree<Tp>::End() const
 {
 	return iterator(nullptr);
 }
 
-template<class _Tp>
-void Tree<_Tp>::init_space_cursor(position begin)
+template<class Tp>
+void Tree<Tp>::init_space_cursor(position begin)
 {
 	space_cursor = begin;
 
@@ -172,8 +173,8 @@ void Tree<_Tp>::init_space_cursor(position begin)
 		nodes[i].next_free = i + 1;
 }
 
-template<class _Tp>
-void Tree<_Tp>::clear(position root_node)
+template<class Tp>
+void Tree<Tp>::clear(position root_node)
 {
 	std::queue<position> trace_queue;
 	trace_queue.push(root_node);
@@ -194,8 +195,8 @@ void Tree<_Tp>::clear(position root_node)
 	}
 }
 
-template<class _Tp>
-void Tree<_Tp>::clear_descendants(position root_node)
+template<class Tp>
+void Tree<Tp>::clear_descendants(position root_node)
 {
 	auto &descendants_list = nodes[root_node].descendants;
 	auto descendant = descendants_list.begin();
@@ -207,8 +208,8 @@ void Tree<_Tp>::clear_descendants(position root_node)
 	}
 }
 
-template<class _Tp>
-typename Tree<_Tp>::position Tree<_Tp>::allocate_node()
+template<class Tp>
+typename Tree<Tp>::position Tree<Tp>::allocate_node()
 {
 	if (space_cursor == nodes.size())
 	{
@@ -221,17 +222,17 @@ typename Tree<_Tp>::position Tree<_Tp>::allocate_node()
 	return position;
 }
 
-template<class _Tp>
-void Tree<_Tp>::erase_node(position p)
+template<class Tp>
+void Tree<Tp>::erase_node(position p)
 {
 	nodes[p].descendants.clear();
 	nodes[p].next_free = space_cursor;
 	space_cursor = p;
 }
 
-template<class _Tp>
-typename Tree<_Tp>::position
-Tree<_Tp>::find_node_position(const_iterator node) const
+template<class Tp>
+typename Tree<Tp>::position
+Tree<Tp>::find_node_position(const_iterator node) const
 {
 	auto value = *node;
 
@@ -258,9 +259,9 @@ Tree<_Tp>::find_node_position(const_iterator node) const
 	throw std::domain_error("Node was not found.");
 }
 
-template<class _Tp>
-typename Tree<_Tp>::position
-Tree<_Tp>::find_node_parent(const_iterator node) const
+template<class Tp>
+typename Tree<Tp>::position
+Tree<Tp>::find_node_parent(const_iterator node) const
 {
 	auto value = *node;
 

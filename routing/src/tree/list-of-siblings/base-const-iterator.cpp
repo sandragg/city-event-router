@@ -4,56 +4,56 @@
 namespace list_of_siblings
 {
 
-template<class _Tp>
-ConstTreeIterator<_Tp>::ConstTreeIterator(std::nullptr_t)
+template<class Tp>
+ConstTreeIterator<Tp>::ConstTreeIterator(std::nullptr_t)
 {
 	this->tree = nullptr;
 	this->cursor = 0;
 }
 
-template<class _Tp>
-ConstTreeIterator<_Tp>::ConstTreeIterator(const Tree<_Tp> &tree)
+template<class Tp>
+ConstTreeIterator<Tp>::ConstTreeIterator(const Tree<Tp> &tree)
 {
 	this->tree = &tree;
 	this->cursor = tree.root;
 }
 
-template<class _Tp>
-ConstTreeIterator<_Tp>::ConstTreeIterator(const Tree<_Tp> &tree, position p)
+template<class Tp>
+ConstTreeIterator<Tp>::ConstTreeIterator(const Tree<Tp> &tree, position p)
 {
 	this->tree = &tree;
 	this->cursor = p;
 }
 
-template<class _Tp>
-typename ConstTreeIterator<_Tp>::reference
-ConstTreeIterator<_Tp>::operator*() const
+template<class Tp>
+typename ConstTreeIterator<Tp>::reference
+ConstTreeIterator<Tp>::operator*() const
 {
 	return tree->nodes[cursor].value;
 }
 
-template<class _Tp>
-typename ConstTreeIterator<_Tp>::pointer
-ConstTreeIterator<_Tp>::operator->() const
+template<class Tp>
+typename ConstTreeIterator<Tp>::pointer
+ConstTreeIterator<Tp>::operator->() const
 {
 	return &*(*this);
 }
 
-template<class _Tp>
-ConstTreeIterator<_Tp>& ConstTreeIterator<_Tp>::operator++()
+template<class Tp>
+ConstTreeIterator<Tp>& ConstTreeIterator<Tp>::operator++()
 {
 	cursor++;
 	return *this;
 }
 
-template<class _Tp>
-bool ConstTreeIterator<_Tp>::operator==(const ConstTreeIterator<_Tp> &rhs) const
+template<class Tp>
+bool ConstTreeIterator<Tp>::operator==(const ConstTreeIterator<Tp> &rhs) const
 {
 	return tree == rhs.tree && cursor == rhs.cursor;
 }
 
-template<class _Tp>
-bool ConstTreeIterator<_Tp>::operator!=(const ConstTreeIterator<_Tp> &rhs) const
+template<class Tp>
+bool ConstTreeIterator<Tp>::operator!=(const ConstTreeIterator<Tp> &rhs) const
 {
 	return !(*this == rhs);
 }

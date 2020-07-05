@@ -8,13 +8,13 @@
 namespace list_of_siblings
 {
 
-template<class _Tp>
+template<class Tp>
 class Tree;
 
-template<class _Tp>
-class ConstTreeIterator : public tree::TreeIterator<const _Tp>
+template<class Tp>
+class ConstTreeIterator : public tree::TreeIterator<const Tp>
 {
-		using base			= tree::TreeIterator<const _Tp>;
+		using base			= tree::TreeIterator<const Tp>;
 		using position		= size_t;
 
 	public:
@@ -23,16 +23,16 @@ class ConstTreeIterator : public tree::TreeIterator<const _Tp>
 		using reference		= typename base::reference;
 
 		explicit ConstTreeIterator(std::nullptr_t);
-		explicit ConstTreeIterator(const Tree<_Tp> &tree);
-		explicit ConstTreeIterator(const Tree<_Tp> &tree, position p);
+		explicit ConstTreeIterator(const Tree<Tp> &tree);
+		explicit ConstTreeIterator(const Tree<Tp> &tree, position p);
 		reference operator*() const;
 		pointer operator->() const;
-		ConstTreeIterator<_Tp>& operator++();
-		bool operator==(const ConstTreeIterator<_Tp>& rhs) const;
-		bool operator!=(const ConstTreeIterator<_Tp>& rhs) const;
+		ConstTreeIterator<Tp>& operator++();
+		bool operator==(const ConstTreeIterator<Tp>& rhs) const;
+		bool operator!=(const ConstTreeIterator<Tp>& rhs) const;
 
 	private:
-		const Tree<_Tp> *tree;
+		const Tree<Tp> *tree;
 		position cursor;
 };
 

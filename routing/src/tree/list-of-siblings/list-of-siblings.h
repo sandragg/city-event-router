@@ -11,19 +11,19 @@
 namespace list_of_siblings
 {
 
-template<class _Tp>
-class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
+template<class Tp>
+class Tree : public tree::Tree<TreeIterator<Tp>, ConstTreeIterator<Tp>>
 {
 		using position			= size_t;
 
 	public:
-		using value_type		= _Tp;
+		using value_type		= Tp;
 		using iterator			= TreeIterator<value_type>;
 		using const_iterator	= ConstTreeIterator<value_type>;
 		using reference			= typename iterator::reference;
 		using const_reference	= typename const_iterator::reference;
 
-		explicit Tree(size_t size);
+		explicit Tree(size_t size = DEFAULT_SIZE);
 		iterator Append(value_type root_value) override;
 		iterator Append(iterator root, std::vector<value_type> &descendants) override;
 		iterator Root() override;
@@ -37,6 +37,7 @@ class Tree : public tree::Tree<TreeIterator<_Tp>, ConstTreeIterator<_Tp>>
 		iterator End() const override;
 
 	private:
+		static const size_t DEFAULT_SIZE = 32;
 		struct Node
 		{
 			/**

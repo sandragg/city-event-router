@@ -4,48 +4,48 @@
 namespace tree
 {
 
-template<class _Container>
-BfsIterator<_Container>::BfsIterator(container& tree)
+template<class Container>
+BfsIterator<Container>::BfsIterator(container& tree)
 {
 	this->tree = &tree;
 	queue.push(tree.Root());
 }
 
-template<class _Container>
-typename BfsIterator<_Container>::reference
-BfsIterator<_Container>::operator*()
+template<class Container>
+typename BfsIterator<Container>::reference
+BfsIterator<Container>::operator*()
 {
 	return *queue.front();
 }
 
-template<class _Container>
-typename BfsIterator<_Container>::pointer BfsIterator<_Container>::operator->()
+template<class Container>
+typename BfsIterator<Container>::pointer BfsIterator<Container>::operator->()
 {
 	return &*(*this);
 }
 
-template<class _Container>
-BfsIterator<_Container>& BfsIterator<_Container>::operator++()
+template<class Container>
+BfsIterator<Container>& BfsIterator<Container>::operator++()
 {
 	traceIteration(*tree, queue);
 	return *this;
 }
 
-template<class _Container>
-bool BfsIterator<_Container>::IsEnd() const
+template<class Container>
+bool BfsIterator<Container>::IsEnd() const
 {
 	return queue.empty();
 }
 
-template<class _Container>
-typename BfsIterator<_Container>::iterator
-tree::BfsIterator<_Container>::Get() const
+template<class Container>
+typename BfsIterator<Container>::iterator
+tree::BfsIterator<Container>::Get() const
 {
 	return queue.front();
 }
 
-template<class _Container>
-void BfsIterator<_Container>::traceIteration(container &container, std::queue<iterator> &trace_queue)
+template<class Container>
+void BfsIterator<Container>::traceIteration(container &container, std::queue<iterator> &trace_queue)
 {
 	while (!trace_queue.empty())
 	{
