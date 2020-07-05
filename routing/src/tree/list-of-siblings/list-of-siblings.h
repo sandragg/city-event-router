@@ -26,9 +26,11 @@ class Tree : public tree::Tree<TreeIterator<Tp>, ConstTreeIterator<Tp>>
 		explicit Tree(size_t size = DEFAULT_SIZE);
 		iterator Append(value_type root_value) override;
 		iterator Append(iterator root, std::vector<value_type> &descendants) override;
+		iterator Append(iterator root, std::vector<value_type> &&descendants) override;
 		iterator Root() override;
 		const_iterator Root() const override;
 		iterator Find(const_iterator node) const override;
+		iterator Find(value_type value) const override;
 		iterator GetParent(const_iterator node) const override;
 		iterator GetLeftMostChild(const_iterator node) const override;
 		iterator GetRightSibling(const_iterator node) const override;
@@ -105,7 +107,7 @@ class Tree : public tree::Tree<TreeIterator<Tp>, ConstTreeIterator<Tp>>
 		 * @return Node position
 		 * @throw domain_error If node wasn't found.
 		 */
-		position find_node_position(const_iterator node) const;
+		position find_node_position(const value_type &value) const;
 		/**
 		 * Find the parent node position.
 		 *
@@ -113,7 +115,7 @@ class Tree : public tree::Tree<TreeIterator<Tp>, ConstTreeIterator<Tp>>
 		 * @return Parent position
 		 * @throw domain_error If parent wasn't found.
 		 */
-		position find_node_parent(const_iterator node) const;
+		position find_node_parent(const value_type &value) const;
 };
 
 } // namespace list_of_siblings

@@ -59,6 +59,8 @@ struct RoutePoint
 	 * @see #timetable::Interval
 	 */
 	timetable::Interval time;
+
+	bool operator==(const RoutePoint &rhs) const;
 };
 
 /**

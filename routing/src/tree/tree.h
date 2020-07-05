@@ -36,7 +36,16 @@ class Tree
 		 * @param descendants Descendants values
 		 * @return Iterator to the changed node.
 		 */
-		virtual iterator Append(iterator root, std::vector<value_type> &descendants) = 0;
+		virtual iterator Append(iterator root, std::vector<value_type>& descendants) = 0;
+		/**
+		 * Append node descendants.
+		 * If subtree isn't empty then clear all descendants and create new ones.
+		 *
+		 * @param root Subtree root node
+		 * @param descendants Descendants values
+		 * @return Iterator to the changed node.
+		 */
+		virtual iterator Append(iterator root, std::vector<value_type>&& descendants) = 0;
 		/**
 		 * Get #iterator to the root.
 		 */
@@ -51,6 +60,12 @@ class Tree
 		 * @return If node exists - #iterator to the node, otherwise - #End.
 		 */
 		virtual iterator Find(const_iterator position) const = 0;
+		/**
+		 * Find node by label.
+		 * @param value_type Node label
+		 * @return If node exists - #iterator to the node, otherwise - #End.
+		 */
+		virtual iterator Find(value_type value) const = 0;
 		/**
 		 * Get node's parent.
 		 * @param position Iterator to the node

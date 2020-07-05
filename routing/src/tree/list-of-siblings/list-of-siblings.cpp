@@ -29,7 +29,7 @@ template<class Tp>
 typename Tree<Tp>::iterator
 Tree<Tp>::Append(iterator root_node, std::vector<value_type> &descendants)
 {
-	auto root_position = find_node_position(root_node);
+	auto root_position = find_node_position(*root_node);
 	clear_descendants(root_position);
 
 	auto &descendants_list = nodes[root_position].descendants;
@@ -38,6 +38,24 @@ Tree<Tp>::Append(iterator root_node, std::vector<value_type> &descendants)
 	{
 		new_position = allocate_node();
 		nodes[new_position].value = value;
+		descendants_list.push_front(new_position);
+	}
+
+	return root_node;
+}
+template<class Tp>
+typename Tree<Tp>::iterator
+Tree<Tp>::Append(iterator root_node, std::vector<value_type> &&descendants)
+{
+	auto root_position = find_node_position(*root_node);
+	clear_descendants(root_position);
+
+	auto &descendants_list = nodes[root_position].descendants;
+	position new_position = 0;
+	for (const auto &value : descendants)
+	{
+		new_position = allocate_node();
+		nodes[new_position].value = std::move(value); // check
 		descendants_list.push_front(new_position);
 	}
 
@@ -62,7 +80,23 @@ Tree<Tp>::Find(const_iterator node) const
 {
 	try
 	{
-		auto node_position = find_node_position(node);
+		auto node_position = find_node_position(*node);
+		return iterator(const_cast<Tree<Tp>&>(*this), node_position);
+	}
+	catch (std::domain_error err)
+	{
+		std::cerr << err.what() << std::endl;
+		return End();
+	}
+}
+
+template<class Tp>
+typename Tree<Tp>::iterator
+Tree<Tp>::Find(value_type value) const
+{
+	try
+	{
+		auto node_position = find_node_position(value);
 		return iterator(const_cast<Tree<Tp>&>(*this), node_position);
 	}
 	catch (std::domain_error err)
@@ -80,7 +114,7 @@ Tree<Tp>::GetParent(const_iterator node) const
 
 	try
 	{
-		auto parent_position = find_node_parent(node);
+		auto parent_position = find_node_parent(*node);
 		return iterator(const_cast<Tree<Tp>&>(*this), parent_position);
 	}
 	catch (std::domain_error err)
@@ -96,7 +130,7 @@ Tree<Tp>::GetLeftMostChild(const_iterator node) const
 {
 	try
 	{
-		auto node_position = find_node_position(node);
+		auto node_position = find_node_position(*node);
 		auto descendants = nodes[node_position].descendants;
 
 		if (!descendants.empty())
@@ -116,10 +150,9 @@ Tree<Tp>::GetRightSibling(const_iterator node) const
 {
 	try
 	{
-		auto parent_position = find_node_parent(node);
-		auto descendants_list = nodes[parent_position].descendants;
-
 		auto value = *node;
+		auto parent_position = find_node_parent(value);
+		auto descendants_list = nodes[parent_position].descendants;
 
 		auto descendant = std::find_if(
 			descendants_list.begin(),
@@ -232,11 +265,9 @@ void Tree<Tp>::erase_node(position p)
 
 template<class Tp>
 typename Tree<Tp>::position
-Tree<Tp>::find_node_position(const_iterator node) const
+Tree<Tp>::find_node_position(const value_type &value) const
 {
-	auto value = *node;
-
-	if (&value == &nodes[root].value) return root;
+	if (value == nodes[root].value) return root;
 
 	std::queue<position> trace_queue;
 	trace_queue.push(root);
@@ -250,7 +281,7 @@ Tree<Tp>::find_node_position(const_iterator node) const
 		auto next_node = descendants.begin();
 		while (next_node != descendants.end())
 		{
-			if (&value == &nodes[*next_node].value) return *next_node;
+			if (value == nodes[*next_node].value) return *next_node;
 			trace_queue.push(*next_node);
 			next_node++;
 		}
@@ -261,10 +292,8 @@ Tree<Tp>::find_node_position(const_iterator node) const
 
 template<class Tp>
 typename Tree<Tp>::position
-Tree<Tp>::find_node_parent(const_iterator node) const
+Tree<Tp>::find_node_parent(const value_type &value) const
 {
-	auto value = *node;
-
 	std::queue<position> trace_queue;
 	trace_queue.push(root);
 
@@ -277,7 +306,7 @@ Tree<Tp>::find_node_parent(const_iterator node) const
 		auto next_node = descendants.begin();
 		while (next_node != descendants.end())
 		{
-			if (&value == &nodes[*next_node].value) return current_node;
+			if (value == nodes[*next_node].value) return current_node;
 			trace_queue.push(*next_node);
 			next_node++;
 		}

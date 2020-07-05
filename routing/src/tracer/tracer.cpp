@@ -10,6 +10,11 @@
 namespace tracer
 {
 
+bool RoutePoint::operator==(const RoutePoint &rhs) const
+{
+	return id == rhs.id && time == rhs.time;
+}
+
 template<typename End_Cond_Tp, typename Heuristic_Tp, typename Time_Calculator_Tp>
 list_of_siblings::Tree<RoutePoint>
 traceGraph(
