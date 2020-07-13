@@ -14,42 +14,6 @@ TEST_CASE("List of siblings implementation", "[tree]")
 	std::array<int, 16> labels;
 	std::iota(labels.begin(), labels.end(), 1);
 
-	SECTION("Initialize tree")
-	{
-		list_of_siblings::Tree<int> tree(16);
-		initialize_tree(tree, labels);
-
-		SECTION("Depth first traversal")
-		{
-			std::vector<int> expected_result =
-				{ 1, 2, 5, 6, 11, 12, 3, 7, 8, 13, 14, 9, 4, 10, 15, 16 };
-
-			tree::DfsIterator<decltype(tree)> it(tree);
-			std::vector<int> result;
-			while (!it.IsEnd())
-			{
-				result.push_back(*it);
-				++it;
-			}
-			REQUIRE(result == expected_result);
-		}
-
-		SECTION("Breadth first traversal")
-		{
-			std::vector<int> expected_result(16);
-			std::iota(expected_result.begin(), expected_result.end(), 1);
-
-			tree::BfsIterator<decltype(tree)> it(tree);
-			std::vector<int> result;
-			while (!it.IsEnd())
-			{
-				result.push_back(*it);
-				++it;
-			}
-			REQUIRE(result == expected_result);
-		}
-	}
-
 	SECTION("Clear tree")
 	{
 		list_of_siblings::Tree<int> tree;
@@ -158,6 +122,46 @@ TEST_CASE("List of siblings implementation", "[tree]")
 		REQUIRE(tree.GetRightSibling(it) == tree.End());
 	}
 }
+
+TEST_CASE("Tree traversal", "[tree]")
+{
+	std::array<int, 16> labels;
+	std::iota(labels.begin(), labels.end(), 1);
+
+	list_of_siblings::Tree<int> tree(16);
+	initialize_tree(tree, labels);
+
+	SECTION("Depth first traversal")
+	{
+		std::vector<int> expected_result =
+			{ 1, 2, 5, 6, 11, 12, 3, 7, 8, 13, 14, 9, 4, 10, 15, 16 };
+
+		tree::DfsIterator<decltype(tree)> it(tree);
+		std::vector<int> result;
+		while (!it.IsEnd())
+		{
+			result.push_back(*it);
+			++it;
+		}
+		REQUIRE(result == expected_result);
+	}
+
+	SECTION("Breadth first traversal")
+	{
+		std::vector<int> expected_result(16);
+		std::iota(expected_result.begin(), expected_result.end(), 1);
+
+		tree::BfsIterator<decltype(tree)> it(tree);
+		std::vector<int> result;
+		while (!it.IsEnd())
+		{
+			result.push_back(*it);
+			++it;
+		}
+		REQUIRE(result == expected_result);
+	}
+}
+
 
 void initialize_tree(list_of_siblings::Tree<int> &tree, const std::array<int, 16> &labels)
 {
