@@ -29,15 +29,17 @@ template<class Tp>
 typename Tree<Tp>::iterator
 Tree<Tp>::Append(iterator root_node, std::vector<value_type> &descendants)
 {
+	if (root_node == End()) return End();
+
 	auto root_position = find_node_position(*root_node);
 	clear_descendants(root_position);
 
 	auto &descendants_list = nodes[root_position].descendants;
 	position new_position = 0;
-	for (const auto &value : descendants)
+	for (auto it = descendants.rbegin(); it != descendants.rend(); it++)
 	{
 		new_position = allocate_node();
-		nodes[new_position].value = value;
+		nodes[new_position].value = *it;
 		descendants_list.push_front(new_position);
 	}
 
@@ -47,15 +49,17 @@ template<class Tp>
 typename Tree<Tp>::iterator
 Tree<Tp>::Append(iterator root_node, std::vector<value_type> &&descendants)
 {
+	if (root_node == End()) return End();
+
 	auto root_position = find_node_position(*root_node);
 	clear_descendants(root_position);
 
 	auto &descendants_list = nodes[root_position].descendants;
 	position new_position = 0;
-	for (const auto &value : descendants)
+	for (auto it = descendants.rbegin(); it != descendants.rend(); it++)
 	{
 		new_position = allocate_node();
-		nodes[new_position].value = std::move(value); // check
+		nodes[new_position].value = std::move(*it); // check
 		descendants_list.push_front(new_position);
 	}
 
@@ -78,6 +82,8 @@ template<class Tp>
 typename Tree<Tp>::iterator
 Tree<Tp>::Find(const_iterator node) const
 {
+	if (node == End()) return End();
+
 	try
 	{
 		auto node_position = find_node_position(*node);
@@ -110,7 +116,7 @@ template<class Tp>
 typename Tree<Tp>::iterator
 Tree<Tp>::GetParent(const_iterator node) const
 {
-	if (node == Root()) return End();
+	if (node == Root() || node == End()) return End();
 
 	try
 	{
@@ -128,6 +134,8 @@ template<class Tp>
 typename Tree<Tp>::iterator
 Tree<Tp>::GetLeftMostChild(const_iterator node) const
 {
+	if (node == End()) return End();
+
 	try
 	{
 		auto node_position = find_node_position(*node);
@@ -148,6 +156,8 @@ template<class Tp>
 typename Tree<Tp>::iterator
 Tree<Tp>::GetRightSibling(const_iterator node) const
 {
+	if (node == End()) return End();
+
 	try
 	{
 		auto value = *node;
@@ -159,7 +169,7 @@ Tree<Tp>::GetRightSibling(const_iterator node) const
 			descendants_list.end(),
 			[&](position p)
 			{
-				return &nodes[p].value == &value;
+				return nodes[p].value == value;
 			});
 
 		auto next_sibling = ++descendant;
