@@ -43,11 +43,11 @@ int main()
 	init_distance_matrix(dist);
 
 	route_context::RouteContext ctx(dist, waypoints);
-	auto route = tracer::traceGraph(
-		dist,
-		is_end(ctx),
-		predict(ctx),
-		calculate_start_time(ctx));
+	auto route = tracer::trace_graph(
+			dist,
+			is_end(ctx),
+			predict(ctx),
+			calculate_start_time(ctx));
 
 	tree::DfsIterator<decltype(route)> iterator(route);
 	while (!iterator.IsEnd())

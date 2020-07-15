@@ -10,14 +10,51 @@
 namespace tracer
 {
 
+bool RoutePoint::operator>(const RoutePoint &rhs) const
+{
+	return time.start > rhs.time.start;
+}
+
+bool RoutePoint::operator<(const RoutePoint &rhs) const
+{
+	return time.start < rhs.time.start;
+}
+
 bool RoutePoint::operator==(const RoutePoint &rhs) const
 {
 	return id == rhs.id && time == rhs.time;
 }
 
+bool Route::operator>(const Route &rhs) const
+{
+	if (points.size() != rhs.points.size())
+		return points.size() > rhs.points.size();
+
+	if (duration != rhs.duration)
+		return duration < rhs.duration;
+
+	if (movement_time != rhs.movement_time)
+		return movement_time < rhs.movement_time;
+
+	return points < rhs.points;
+}
+
+bool Route::operator<(const Route &rhs) const
+{
+	return !(*this == rhs || *this > rhs);
+}
+
+bool Route::operator==(const Route &rhs) const
+{
+	return duration == rhs.duration
+		&& movement_time == rhs.movement_time
+		&& points.size() == rhs.points.size()
+		&& points == rhs.points;
+}
+
 template<typename End_Cond_Tp, typename Heuristic_Tp, typename Time_Calculator_Tp>
 list_of_siblings::Tree<RoutePoint>
-traceGraph(
+trace_graph(
 	DistanceMatrix& dist_matrix,
 	End_Cond_Tp&& is_end,
 	Heuristic_Tp&& predict,

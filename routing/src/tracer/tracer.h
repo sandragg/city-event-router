@@ -60,7 +60,29 @@ struct RoutePoint
 	 */
 	timetable::Interval time;
 
+	bool operator>(const RoutePoint &rhs) const;
+	bool operator<(const RoutePoint &rhs) const;
 	bool operator==(const RoutePoint &rhs) const;
+};
+
+struct Route
+{
+	/**
+	 * Points in route.
+	 */
+	std::vector<RoutePoint> points;
+	/**
+	 * Full time duration.
+	 */
+	time_t duration;
+	/**
+	 * Summary time on moving/driving between points in route.
+	 */
+	time_t movement_time;
+
+	bool operator>(const Route &rhs) const;
+	bool operator<(const Route &rhs) const;
+	bool operator==(const Route &rhs) const;
 };
 
 /**
@@ -77,7 +99,7 @@ struct RoutePoint
  * @return Array of route points
  */
 template<typename End_Cond_Tp, typename Heuristic_Tp, typename Time_Calculator_Tp>
-list_of_siblings::Tree<RoutePoint> traceGraph(
+list_of_siblings::Tree<RoutePoint> trace_graph(
 	DistanceMatrix& dist_matrix,
 	End_Cond_Tp&& is_end,
 	Heuristic_Tp&& predict,

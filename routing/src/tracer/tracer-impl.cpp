@@ -9,7 +9,7 @@ using Heuristic = std::invoke_result<decltype(predict), route_context::RouteCont
 using Time_Calculator = std::invoke_result<decltype(calculate_start_time), route_context::RouteContext&>::type;
 
 template list_of_siblings::Tree<tracer::RoutePoint>
-tracer::traceGraph(
+tracer::trace_graph(
 	DistanceMatrix& dist_matrix,
 	End_Cond&& is_end,
 	Heuristic&& predict,
