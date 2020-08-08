@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <queue>
+#include <stack>
 #include <algorithm>
 #include "../tree/iterators/depth-first-search.h"
 #include "../models/priority-point.h"
@@ -25,7 +26,8 @@ bool RoutePoint::operator==(const RoutePoint &rhs) const
 	return id == rhs.id && time == rhs.time;
 }
 
-bool Route::operator>(const Route &rhs) const
+template <class Tp>
+bool Route<Tp>::operator>(const Route &rhs) const
 {
 	if (points.size() != rhs.points.size())
 		return points.size() > rhs.points.size();
@@ -39,12 +41,14 @@ bool Route::operator>(const Route &rhs) const
 	return points < rhs.points;
 }
 
-bool Route::operator<(const Route &rhs) const
+template <class Tp>
+bool Route<Tp>::operator<(const Route &rhs) const
 {
 	return !(*this == rhs || *this > rhs);
 }
 
-bool Route::operator==(const Route &rhs) const
+template <class Tp>
+bool Route<Tp>::operator==(const Route &rhs) const
 {
 	return duration == rhs.duration
 		&& movement_time == rhs.movement_time
@@ -52,7 +56,7 @@ bool Route::operator==(const Route &rhs) const
 		&& points == rhs.points;
 }
 
-template<typename End_Cond_Tp, typename Heuristic_Tp, typename Time_Calculator_Tp>
+template<class End_Cond_Tp, class Heuristic_Tp, class Time_Calculator_Tp>
 list_of_siblings::Tree<RoutePoint>
 trace_graph(
 	DistanceMatrix& dist_matrix,
@@ -70,7 +74,7 @@ trace_graph(
 
 	list_of_siblings::Tree<RoutePoint> routes(matrix_size);
 	// 1) add entry point as a root in a routes tree
-	routes.Append(RoutePoint {1});
+	routes.Append(RoutePoint { 0 });
 	tree::DfsIterator<decltype(routes)> current_point(routes);
 
 	while (!current_point.IsEnd())
@@ -84,7 +88,8 @@ trace_graph(
 			if (current_point.IsEnd()) break;
 
 			/* Revert visited points to unvisited */
-			auto next_point_parent = routes.GetParent(current_point.Get());
+			auto next_point_parent = routes.GetParent(current_point.Get()); // GetParent use breadth first search
+			// Need unique id's for each route or DFS in GetParent
 			do
 			{
 				unvisited.insert(visited_point->id);
@@ -148,6 +153,52 @@ trace_graph(
 	}
 
 	return routes;
+}
+
+template <class Tp>
+void extract_routes(
+	const list_of_siblings::Tree<Tp> &tree,
+	std::priority_queue<Route<Tp>> &routes)
+{
+	std::stack<typename list_of_siblings::Tree<Tp>::const_iterator> trace_stack;
+	Route<Tp> route;
+
+	trace_stack.push(tree.Root());
+	while (!trace_stack.empty())
+	{
+		route.points.push_back(*trace_stack.top());
+		auto next_node = tree.GetLeftMostChild(trace_stack.top());
+		if (next_node == tree.End())
+			routes.push(route);
+		while (next_node == tree.End())
+		{
+			auto current_node = trace_stack.top();
+			trace_stack.pop();
+			route.points.pop_back();
+			if (trace_stack.empty()) return;
+			next_node = tree.GetRightSibling(current_node);
+		}
+		trace_stack.push(next_node);
+	}
+}
+
+template <class Tp>
+std::vector<Route<Tp>>
+find_matched_routes(const list_of_siblings::Tree<Tp> &tree, size_t limit)
+{
+	if (!limit || tree.Empty()) return {};
+
+	std::priority_queue<Route<Tp>> priority_routes;
+	extract_routes(tree, priority_routes);
+
+	std::vector<Route<Tp>> result(std::min(priority_routes.size(), limit));
+	for (auto &route : result)
+	{
+		route = priority_routes.top();
+		priority_routes.pop();
+	}
+
+	return result;
 }
 
 } // namespace tracer

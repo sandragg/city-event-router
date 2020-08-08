@@ -3,9 +3,7 @@
 #include "src/distance-matrix/distance-matrix.h"
 #include "src/tracer/tracer.h"
 #include "src/route-context/route-context.h"
-#include "src/draft-1.h"
-
-#include "src/implementations.cpp"
+#include "src/tracer-strategies/default.h"
 
 
 void init_waypoints(std::vector<Waypoint> &waypoints)
@@ -43,20 +41,27 @@ int main()
 	init_distance_matrix(dist);
 
 	route_context::RouteContext ctx(dist, waypoints);
-	auto route = tracer::trace_graph(
-			dist,
-			is_end(ctx),
-			predict(ctx),
-			calculate_start_time(ctx));
+	auto routes_tree = tracer::trace_graph(
+		dist,
+		is_end(ctx),
+		predict(ctx),
+		calculate_start_time(ctx));
+	auto routes = tracer::find_matched_routes(routes_tree, 100);
 
-	tree::DfsIterator<decltype(route)> iterator(route);
-	while (!iterator.IsEnd())
+	for (auto &route : routes)
 	{
 		std::cout
-			<< iterator->id
-			<< " (" << iterator->time.start << "; " << iterator->time.end << ")"
+			<< "duration = " << route.duration << ", "
+			<< "driving time = " << route.movement_time << ":"
 			<< std::endl;
-		++iterator;
+		for (auto &point : route.points)
+		{
+			std::cout
+				<< point.id
+				<< " (" << point.time.start << "; " << point.time.end << ")"
+				<< std::endl;
+		}
+		std::cout << std::endl;
 	}
 
 	return 0;

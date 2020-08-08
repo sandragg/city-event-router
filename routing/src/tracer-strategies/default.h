@@ -1,12 +1,12 @@
-#ifndef ROUTING_IMPL_1
-#define ROUTING_IMPL_1
+#ifndef ROUTING_STRTG_DEFAULT
+#define ROUTING_STRTG_DEFAULT
 
 #include <unordered_set>
 #include <limits>
-#include "route-context/route-context.h"
+#include "../route-context/route-context.h"
 
 
-auto is_end(route_context::RouteContext& ctx) {
+inline auto is_end(route_context::RouteContext& ctx) {
 	return [&](time_t now, std::unordered_set<int>& unvisited) -> bool
 	{
 		ctx.UpdateOnNewTick(now);
@@ -19,7 +19,7 @@ auto is_end(route_context::RouteContext& ctx) {
 	};
 };
 
-auto predict(route_context::RouteContext& ctx) {
+inline auto predict(route_context::RouteContext& ctx) {
 	return [&](time_t now, std::unordered_set<int>& unvisited, int point_id) -> time_t
 	{
 		time_t result = 0;
@@ -66,7 +66,7 @@ auto predict(route_context::RouteContext& ctx) {
 	};
 };
 
-auto calculate_start_time(route_context::RouteContext& ctx)
+inline auto calculate_start_time(route_context::RouteContext& ctx)
 {
 	return [&](int point_id, time_t& now) -> time_t
 	{
@@ -77,4 +77,4 @@ auto calculate_start_time(route_context::RouteContext& ctx)
 };
 
 
-#endif
+#endif // ROUTING_STRTG_DEFAULT

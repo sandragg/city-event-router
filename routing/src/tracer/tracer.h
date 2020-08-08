@@ -65,12 +65,13 @@ struct RoutePoint
 	bool operator==(const RoutePoint &rhs) const;
 };
 
+template <class Tp>
 struct Route
 {
 	/**
 	 * Points in route.
 	 */
-	std::vector<RoutePoint> points;
+	std::vector<Tp> points;
 	/**
 	 * Full time duration.
 	 */
@@ -93,17 +94,28 @@ struct Route
  *
  * @tparam End_Cond_Tp #end_condition
  * @tparam Heuristic_Tp #heuristic
+ * @tparam Time_Calculator_Tp #start_time_calculator
  * @param dist_matrix Distance matrix
  * @param is_end Trace end check function
  * @param predict %Point priority computation function
  * @return Array of route points
  */
-template<typename End_Cond_Tp, typename Heuristic_Tp, typename Time_Calculator_Tp>
+template<class End_Cond_Tp, class Heuristic_Tp, class Time_Calculator_Tp>
 list_of_siblings::Tree<RoutePoint> trace_graph(
 	DistanceMatrix& dist_matrix,
 	End_Cond_Tp&& is_end,
 	Heuristic_Tp&& predict,
 	Time_Calculator_Tp&& calc_start_time);
+
+/**
+ * Get up to *limit* routes ordered by priority.
+ * @param tree Routes tree
+ * @param limit Max amount of routes
+ * @return Array of routes
+ */
+template <class Tp>
+std::vector<Route<Tp>>
+find_matched_routes(const list_of_siblings::Tree<Tp> &tree, size_t limit);
 
 } // namespace tracer
 

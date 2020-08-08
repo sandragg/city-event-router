@@ -21,7 +21,8 @@ add_executable(
     src/route-context/route-context.cpp
     src/timetable/event.cpp
     src/timetable/place.cpp
-    src/models/custom-settings.cpp)
+    src/models/custom-settings.cpp
+    src/implementations.cpp)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
     set_target_properties(routing PROPERTIES LINK_FLAGS
