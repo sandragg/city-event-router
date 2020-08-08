@@ -34,13 +34,12 @@ Tree<Tp>::Append(iterator root_node, std::vector<value_type> &descendants)
 	auto root_position = find_node_position(*root_node);
 	clear_descendants(root_position);
 
-	auto &descendants_list = nodes[root_position].descendants;
 	position new_position = 0;
 	for (auto it = descendants.rbegin(); it != descendants.rend(); it++)
 	{
 		new_position = allocate_node();
 		nodes[new_position].value = *it;
-		descendants_list.push_front(new_position);
+		nodes[root_position].descendants.push_front(new_position);
 	}
 
 	return root_node;
@@ -54,13 +53,12 @@ Tree<Tp>::Append(iterator root_node, std::vector<value_type> &&descendants)
 	auto root_position = find_node_position(*root_node);
 	clear_descendants(root_position);
 
-	auto &descendants_list = nodes[root_position].descendants;
 	position new_position = 0;
 	for (auto it = descendants.rbegin(); it != descendants.rend(); it++)
 	{
 		new_position = allocate_node();
 		nodes[new_position].value = std::move(*it); // check
-		descendants_list.push_front(new_position);
+		nodes[root_position].descendants.push_front(new_position);
 	}
 
 	return root_node;
