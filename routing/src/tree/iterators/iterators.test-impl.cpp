@@ -7,5 +7,5 @@
 template class tree::BfsIterator<list_of_siblings::Tree<int>>;
 template class tree::DfsIterator<list_of_siblings::Tree<int>>;
 
-template class tree::BfsIterator<list_of_siblings::Tree<tracer::RoutePoint>>;
-template class tree::DfsIterator<list_of_siblings::Tree<tracer::RoutePoint>>;
+template class tree::BfsIterator<list_of_siblings::Tree<tracer::RoutePoint<int>>>;
+template class tree::DfsIterator<list_of_siblings::Tree<tracer::RoutePoint<int>>>;

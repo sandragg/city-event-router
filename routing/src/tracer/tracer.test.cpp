@@ -71,15 +71,15 @@ TEST_CASE("Get up to N routes ordered by priority", "[tracer]")
 	for (auto &route : routes)
 	{
 		std::cout
-				<< "duration = " << route.duration << ", "
-				<< "driving time = " << route.movement_time << ":"
-				<< std::endl;
+			<< "duration = " << route.duration << ", "
+			<< "driving time = " << route.movement_time << ":"
+			<< std::endl;
 		for (auto &point : route.points)
 		{
 			std::cout
-					<< point.id
-					<< " (" << point.time.start << "; " << point.time.end << ")"
-					<< std::endl;
+				<< point.meta
+				<< " (" << point.time.start << "; " << point.time.end << ")"
+				<< std::endl;
 		}
 		std::cout << std::endl;
 	}

@@ -44,12 +44,17 @@ using end_condition = bool(*)(time_t now, std::unordered_set<int>& unvisited);
  */
 using start_time_calculator = time_t(*)(int point_id, time_t& now);
 
+template <class Tp>
 struct RoutePoint
 {
 	/**
 	 * %Point id
 	 */
-	int id;
+	size_t id;
+	/**
+	 * %Point meta data
+	 */
+	Tp meta;
 	/**
 	 * Time data.
 	 * Where
@@ -101,7 +106,7 @@ struct Route
  * @return Array of route points
  */
 template<class End_Cond_Tp, class Heuristic_Tp, class Time_Calculator_Tp>
-list_of_siblings::Tree<RoutePoint> trace_graph(
+list_of_siblings::Tree<RoutePoint<int>> trace_graph(
 	DistanceMatrix& dist_matrix,
 	End_Cond_Tp&& is_end,
 	Heuristic_Tp&& predict,

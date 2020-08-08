@@ -11,19 +11,22 @@
 namespace tracer
 {
 
-bool RoutePoint::operator>(const RoutePoint &rhs) const
+template <class Tp>
+bool RoutePoint<Tp>::operator>(const RoutePoint &rhs) const
 {
 	return time.start > rhs.time.start;
 }
 
-bool RoutePoint::operator<(const RoutePoint &rhs) const
+template <class Tp>
+bool RoutePoint<Tp>::operator<(const RoutePoint &rhs) const
 {
 	return time.start < rhs.time.start;
 }
 
-bool RoutePoint::operator==(const RoutePoint &rhs) const
+template <class Tp>
+bool RoutePoint<Tp>::operator==(const RoutePoint &rhs) const
 {
-	return id == rhs.id && time == rhs.time;
+	return id == rhs.id;
 }
 
 template <class Tp>
@@ -57,7 +60,7 @@ bool Route<Tp>::operator==(const Route &rhs) const
 }
 
 template<class End_Cond_Tp, class Heuristic_Tp, class Time_Calculator_Tp>
-list_of_siblings::Tree<RoutePoint>
+list_of_siblings::Tree<RoutePoint<int>>
 trace_graph(
 	DistanceMatrix& dist_matrix,
 	End_Cond_Tp&& is_end,
@@ -71,10 +74,11 @@ trace_graph(
 		unvisited.insert(i);
 
 	time_t curr_time = 0;
+	size_t id_counter = 0;
 
-	list_of_siblings::Tree<RoutePoint> routes(matrix_size);
+	list_of_siblings::Tree<RoutePoint<int>> routes(matrix_size);
 	// 1) add entry point as a root in a routes tree
-	routes.Append(RoutePoint { 0 });
+	routes.Append(RoutePoint<int> { id_counter++, 0 });
 	tree::DfsIterator<decltype(routes)> current_point(routes);
 
 	while (!current_point.IsEnd())
@@ -88,17 +92,16 @@ trace_graph(
 			if (current_point.IsEnd()) break;
 
 			/* Revert visited points to unvisited */
-			auto next_point_parent = routes.GetParent(current_point.Get()); // GetParent use breadth first search
-			// Need unique id's for each route or DFS in GetParent
+			auto next_point_parent = routes.GetParent(current_point.Get());
 			do
 			{
-				unvisited.insert(visited_point->id);
+				unvisited.insert(visited_point->meta);
 				visited_point = routes.GetParent(visited_point);
 
 			} while (visited_point != next_point_parent);
 
-			auto parent_id = next_point_parent->id;
-			auto current_point_id = current_point.Get()->id;
+			auto parent_id = next_point_parent->meta;
+			auto current_point_id = current_point.Get()->meta;
 			/* Mark next point as visited */
 			unvisited.erase(current_point_id);
 			/* Reset time to a start time at the next point */
@@ -109,7 +112,7 @@ trace_graph(
 
 			continue;
 		}
-		auto point = (*current_point).id;
+		auto point = (*current_point).meta;
 		// set start time (considering time before open) + increase curr_time on min stay time
 		(*current_point).time.start = calc_start_time(point, curr_time);
 		{
@@ -132,13 +135,13 @@ trace_graph(
 					});
 			}
 			// 2) pop all elements from queue and add as children of the current node in a routes tree
-			std::vector<RoutePoint> children;
+			std::vector<RoutePoint<int>> children;
 			PriorityPoint<time_t> child;
 			while (!next_step.empty())
 			{
 				child = next_step.top();
 				next_step.pop();
-				children.emplace_back(RoutePoint {child.id});
+				children.emplace_back(RoutePoint<int> { id_counter++, child.id });
 			}
 			routes.Append(current_point.Get(), children);
 		}
@@ -147,9 +150,9 @@ trace_graph(
 		auto next_point = *current_point;
 		// duration for previous step will be computed later or independently.
 		// cause routes tree is shared and duration at one point for different routes is different too
-		curr_time += dist_matrix[point][next_point.id];
+		curr_time += dist_matrix[point][next_point.meta];
 
-		unvisited.erase(next_point.id);
+		unvisited.erase(next_point.meta);
 	}
 
 	return routes;
