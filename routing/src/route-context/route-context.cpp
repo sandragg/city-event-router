@@ -61,7 +61,22 @@ RouteContext::~RouteContext()
 
 void RouteContext::UpdateOnNewTick(time_t now)
 {
-	if (upcoming == RouteContext::PAST_TIME) return;
+	if (upcoming == RouteContext::PAST_TIME)
+		upcoming = time_priorities.size() - 1;
+
+	if (time_priorities[upcoming] > now)
+	{
+		for (upcoming--; upcoming >= 0; upcoming--)
+		{
+			if (time_priorities[upcoming] < now)
+			{
+				upcoming++;
+				return;
+			}
+		}
+		upcoming = 0;
+		return;
+	}
 
 	for (; upcoming < time_priorities.size(); upcoming++)
 		if (time_priorities[upcoming] >= now) return;

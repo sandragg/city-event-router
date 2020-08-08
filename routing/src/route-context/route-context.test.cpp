@@ -167,5 +167,19 @@ TEST_CASE("Route context", "[RouteContext]")
 			}
 			REQUIRE_FALSE(ctx.UpcomingExists());
 		}
+
+		SECTION("Reset upcoming point")
+		{
+			ctx.UpdateOnNewTick(simplified_points.back().second);
+			REQUIRE_FALSE(ctx.UpcomingExists());
+
+			ctx.UpdateOnNewTick(simplified_points.begin()->second);
+			REQUIRE(ctx.UpcomingExists());
+			REQUIRE((ctx.UpcomingPointId() == (simplified_points.begin() + 1)->first));
+
+			ctx.UpdateOnNewTick(0);
+			REQUIRE(ctx.UpcomingExists());
+			REQUIRE((ctx.UpcomingPointId() == simplified_points.begin()->first));
+		}
 	}
 }
